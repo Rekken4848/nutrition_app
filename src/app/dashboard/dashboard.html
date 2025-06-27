@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="welcome-section">
+    <h1 class="welcome-title">Welcome back, {{ userName }}! 👋</h1>
+    <p class="welcome-date">Today - {{ today }}</p>
+  </div>
+
+  <div class="kitchen-highlight">
+    <h2>🍳 Smart Kitchen Hub</h2>
+    <p>Access your IoT kitchen devices, smart scales, and AI chef assistant</p>
+    <a class="kitchen-btn" (click)="navigateToKitchen()">
+      <div class="kitchen-icon">🍲</div>
+      <span>Enter Smart Kitchen</span>
+    </a>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let stat of stats">
+      <div class="stat-icon">{{ stat.icon }}</div>
+      <div class="stat-value">{{ stat.value }}</div>
+      <div class="stat-label">{{ stat.label }}</div>
+    </div>
+  </div>
+
+  <div class="goals-section">
+    <div class="goals-header">
+      <h2 class="goals-title">Daily Goals Progress</h2>
+      <div class="goal-info">Goal: 2000 calories</div>
+    </div>
+
+    <div class="progress-item" *ngFor="let item of progress">
+      <div class="progress-label">{{ item.label }}</div>
+      <div class="progress-bar-container">
+        <div
+          class="progress-bar progress-{{ item.class }}"
+          [style.width.%]="(item.value / item.goal) * 100"
+        ></div>
+      </div>
+      <div class="progress-values">
+        {{ item.value }}{{ item.label === 'Calories' ? ' / 2,000' : item.label === 'Protein' ? 'g / 150g' : 'g / 250g' }}
+      </div>
+    </div>
+  </div>
+</div>

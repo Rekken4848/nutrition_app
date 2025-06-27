@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Healthy Recipes</h1>
+    <p>Discover delicious and nutritious recipes for your wellness journey</p>
+  </div>
+
+  <div class="search-filters">
+    <div class="filter-row">
+      <div class="search-box">
+        <label for="recipeSearch">Search Recipes</label>
+        <input id="recipeSearch" type="text" [(ngModel)]="searchTerm" (input)="filterRecipes()" placeholder="Search recipes..." />
+      </div>
+
+      <div class="filter-group">
+        <label for="categoryFilter">Category</label>
+        <select id="categoryFilter" class="filter-select" [(ngModel)]="category" (change)="filterRecipes()">
+          <option value="">All Categories</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+          <option value="snack">Snacks</option>
+          <option value="dessert">Desserts</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="dietFilter">Diet Type</label>
+        <select id="dietFilter" class="filter-select" [(ngModel)]="diet" (change)="filterRecipes()">
+          <option value="">All Diets</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="vegan">Vegan</option>
+          <option value="keto">Keto</option>
+          <option value="paleo">Paleo</option>
+          <option value="gluten-free">Gluten-Free</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="recipe-grid">
+    <div *ngIf="filteredRecipes.length === 0" class="no-results">
+      <h3>No recipes found</h3>
+      <p>Try adjusting your search criteria</p>
+    </div>
+
+    <div *ngFor="let recipe of filteredRecipes" class="recipe-card">
+      <div class="recipe-image">{{ recipe.emoji }}</div>
+      <div class="recipe-content">
+        <h3 class="recipe-title">{{ recipe.title }}</h3>
+        <div class="recipe-meta">
+          <span>⏱️ {{ recipe.time }}</span>
+          <span>👥 {{ recipe.servings }} serving{{ recipe.servings > 1 ? 's' : '' }}</span>
+        </div>
+        <div class="nutrition-info">
+          <div class="nutrition-item">
+            <div class="nutrition-value">{{ recipe.calories }}</div>
+            <div class="nutrition-label">Calories</div>
+          </div>
+          <div class="nutrition-item">
+            <div class="nutrition-value">{{ recipe.protein }}g</div>
+            <div class="nutrition-label">Protein</div>
+          </div>
+          <div class="nutrition-item">
+            <div class="nutrition-value">{{ recipe.carbs }}g</div>
+            <div class="nutrition-label">Carbs</div>
+          </div>
+          <div class="nutrition-item">
+            <div class="nutrition-value">{{ recipe.fat }}g</div>
+            <div class="nutrition-label">Fat</div>
+          </div>
+        </div>
+        <div class="recipe-tags">
+          <span *ngFor="let tag of recipe.tags" class="tag">{{ tag }}</span>
+        </div>
+        <button class="btn" (click)="viewRecipe(recipe.id)">View Recipe</button>
+      </div>
+    </div>
+  </div>
+</div>

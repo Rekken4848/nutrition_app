@@ -1,0 +1,16 @@
+<section>
+    @if (isLoggedIn) {
+        <p>Bienvenido, {{ username }}</p>
+        <img
+        (click)="greet()" alt="photo" src="https://github.com/Rekken4848.png" />
+    } @else {
+        <p>¡Inicia sesión!</p>
+        <button (click)="isLoggedIn = true">Log In</button>
+    }
+    <app-recipe (addFavoriteEvent)="getFavorite($event)" username="{{ username }}"></app-recipe>
+
+    @if (favRecipe != '') {
+        <p>Tu receta favorita es {{ favRecipe }}</p>
+    }
+</section>
+
