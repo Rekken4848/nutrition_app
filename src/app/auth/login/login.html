@@ -1,18 +1,4 @@
-<!--div class="login-container">
-  <h2>Iniciar sesión</h2>
-  <form (ngSubmit)="login()">
-    <label>Usuario:</label>
-    <input type="text" [(ngModel)]="username" name="username" required />
-
-    <label>Contraseña:</label>
-    <input type="password" [(ngModel)]="password" name="password" required />
-
-    <button type="submit">Entrar</button>
-
-    <p *ngIf="errorMessage" style="color:red;">{{ errorMessage }}</p>
-  </form>
-</div-->
-<a routerLink="/" class="back-home">← Back to Home</a>
+<!--a routerLink="/" class="back-home">← Back to Home</a>
 
 <div class="login-container">
   <div class="logo">
@@ -57,5 +43,190 @@
   <div class="links">
     <a routerLink="/register">Create Account</a>
     <a routerLink="/help">Need Help?</a>
+  </div>
+</div-->
+
+<a routerLink="/" class="back-btn">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+  </svg>
+  Back to Home
+</a>
+
+<div class="auth-container">
+  <div class="auth-header">
+    <div class="logo">NutriTrack</div>
+    <p class="welcome-text">{{ isLogin ? 'Welcome back!' : 'Join NutriTrack today!' }}</p>
+  </div>
+
+  <div class="form-container">
+    <div class="form-toggle">
+      <button class="toggle-btn" [class.active]="isLogin" (click)="showLogin()">Sign In</button>
+      <button class="toggle-btn" [class.active]="!isLogin" (click)="showRegister()">Create Account</button>
+    </div>
+
+    <!-- Login -->
+    <form *ngIf="isLogin" [formGroup]="loginForm" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" formControlName="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="password-container">
+          <input [type]="showLoginPassword ? 'text' : 'password'" formControlName="password"
+            placeholder="Enter your password" required>
+          <button type="button" class="password-toggle" (click)="showLoginPassword = !showLoginPassword">
+            {{ showLoginPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" formControlName="rememberMe">
+        <label>Remember me</label>
+      </div>
+
+      <div class="forgot-password">
+        <a href="#" (click)="forgotPassword($event)">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="submit-btn">Sign In</button>
+
+      <!--div class="divider"><span>or continue with</span></div>
+
+      <div class="social-login">
+        <a href="#" class="social-btn google-btn" (click)="socialLogin('Google', $event)">Google</a>
+        <a href="#" class="social-btn facebook-btn" (click)="socialLogin('Facebook', $event)">Facebook</a>
+      </div-->
+    </form>
+
+    <!-- Register -->
+    <form *ngIf="!isLogin" [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+      <!--div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="fullName" [(ngModel)]="registerData.fullName" required>
+      </div-->
+
+      <!-- First & Last Name -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" formControlName="firstName" placeholder="John" required>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" formControlName="lastName" placeholder="Doe" required>
+        </div>
+      </div>
+
+      <!-- Username -->
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" formControlName="username" placeholder="john0324" required>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" formControlName="email" placeholder="john.doe@email.com" required>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label>Password</label>
+        <div class="password-container">
+          <input [type]="showRegisterPassword ? 'text' : 'password'" formControlName="password"
+            placeholder="Create a password" required>
+          <button type="button" class="password-toggle" (click)="showRegisterPassword = !showRegisterPassword">
+            {{ showRegisterPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="password-container">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword"
+            placeholder="Confirm your password" required>
+          <button type="button" class="password-toggle" (click)="showConfirmPassword = !showConfirmPassword">
+            {{ showConfirmPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Age & Gender -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" formControlName="age" placeholder="28" min="13" max="120" required>
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select formControlName="gender" required>
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+            <option value="prefer-not-to-say">Prefer not to say</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Height & Weight -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Height (cm)</label>
+          <input type="number" formControlName="height" placeholder="175" min="100" max="250"
+            required>
+        </div>
+        <div class="form-group">
+          <label>Weight (kg)</label>
+          <input type="number" formControlName="weight" placeholder="70" min="30" max="300"
+            step="0.1" required>
+        </div>
+      </div>
+
+      <!-- Activity Level -->
+      <div class="form-group">
+        <label>Activity Level</label>
+        <select formControlName="activityLevel" required>
+          <option value="">Select activity level</option>
+          <option value="sedentary">Sedentary (little or no exercise)</option>
+          <option value="light">Light (light exercise 1-3 days/week)</option>
+          <option value="moderate">Moderate (moderate exercise 3-5 days/week)</option>
+          <option value="active">Active (hard exercise 6-7 days/week)</option>
+          <option value="very-active">Very Active (very hard exercise, physical job)</option>
+        </select>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" formControlName="agreeTerms" required>
+        <label>
+          I agree to the
+          <a href="#" style="color: var(--green);">Terms of Service</a> and
+          <a href="#" style="color: var(--green);">Privacy Policy</a>
+        </label>
+      </div>
+
+      <button type="submit" class="submit-btn">Create Account</button>
+    </form>
+    <div class="divider"><span>or continue with</span></div>
+
+    <div class="social-login">
+      <a href="#" class="social-btn google-btn" (click)="socialLogin('Google', $event)">Google</a>
+      <a href="#" class="social-btn facebook-btn" (click)="socialLogin('Facebook', $event)">Facebook</a>
+    </div>
+  </div>
+
+  <div class="auth-footer">
+    <span *ngIf="isLogin">
+      Don't have an account? <a href="#" (click)="showRegister()">Create Account</a>
+    </span>
+    <span *ngIf="!isLogin">
+      Already have an account? <a href="#" (click)="showLogin()">Sign In</a>
+    </span>
   </div>
 </div>

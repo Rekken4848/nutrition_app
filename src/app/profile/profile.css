@@ -1,0 +1,357 @@
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 20px;
+}
+
+.profile-header {
+    background: var(--white);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(11, 11, 11, 0.08);
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--green) 0%, var(--tan) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: var(--white);
+    margin: 0 auto 2rem;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(129, 177, 74, 0.3);
+}
+
+.avatar-edit {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: var(--red-orange);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.avatar-edit:hover {
+    background: #e63e1f;
+    transform: scale(1.1);
+}
+
+.profile-name {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--black);
+}
+
+.profile-email {
+    color: var(--black);
+    opacity: 0.7;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--cream);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.stat-item:hover {
+    border-color: var(--tan);
+    transform: translateY(-3px);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: var(--black);
+    opacity: 0.7;
+}
+
+.settings-section {
+    background: var(--white);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(11, 11, 11, 0.08);
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: var(--black);
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: var(--black);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--cream);
+    border-radius: 12px;
+    font-size: 1rem;
+    background: var(--cream);
+    color: var(--black);
+    transition: all 0.3s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--green);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(129, 177, 74, 0.1);
+}
+
+.btn {
+    padding: 15px 30px;
+    background: var(--green);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-right: 1rem;
+}
+
+.btn:hover {
+    background: #6fa03a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(129, 177, 74, 0.3);
+}
+
+.btn-secondary {
+    background: var(--tan);
+}
+
+.btn-secondary:hover {
+    background: #d4a373;
+}
+
+.btn-danger {
+    background: var(--red-orange);
+}
+
+.btn-danger:hover {
+    background: #e63e1f;
+}
+
+.goals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.goal-card {
+    background: var(--cream);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.goal-card:hover {
+    border-color: var(--tan);
+    transform: translateY(-3px);
+}
+
+.goal-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.goal-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+}
+
+.goal-label {
+    color: var(--black);
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+.achievements {
+    background: linear-gradient(135deg, var(--tan) 0%, var(--green) 100%);
+    padding: 3rem;
+    border-radius: 20px;
+    color: var(--white);
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.achievements h2 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.achievement-item {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.achievement-item:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+}
+
+.achievement-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.achievement-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-header {
+        padding: 2rem;
+    }
+
+    .profile-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .settings-section {
+        padding: 2rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .goals-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .achievement-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem 15px;
+    }
+
+    .profile-header {
+        padding: 1.5rem;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 3rem;
+    }
+
+    .profile-name {
+        font-size: 1.8rem;
+    }
+
+    .settings-section {
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .achievement-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .achievements {
+        padding: 2rem;
+    }
+}

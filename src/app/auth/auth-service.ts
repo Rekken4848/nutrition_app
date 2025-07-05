@@ -11,8 +11,9 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(this.apiUrl, { username, password });
+  login(credentials: string, password: string): Observable<any> {
+    console.log('Login payload:', { credentials, password });
+    return this.http.post(this.apiUrl, { credentials, password });
   }
   /*private baseUrl = 'http://localhost:8080/auth';
 

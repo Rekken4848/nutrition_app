@@ -30,13 +30,55 @@
     <div class="progress-item" *ngFor="let item of progress">
       <div class="progress-label">{{ item.label }}</div>
       <div class="progress-bar-container">
-        <div
-          class="progress-bar progress-{{ item.class }}"
-          [style.width.%]="(item.value / item.goal) * 100"
-        ></div>
+        <div class="progress-bar progress-{{ item.class }}" [style.width.%]="(item.value / item.goal) * 100"></div>
       </div>
       <div class="progress-values">
-        {{ item.value }}{{ item.label === 'Calories' ? ' / 2,000' : item.label === 'Protein' ? 'g / 150g' : 'g / 250g' }}
+        {{ item.value }}{{ item.label === 'Calories' ? ' / 2,000' : item.label === 'Protein' ? 'g / 150g' : 'g / 250g'
+        }}
+      </div>
+    </div>
+  </div>
+
+  <div class="meals-section">
+    <div class="meal-card">
+      <div class="meal-header">
+        <div class="meal-title">
+          <span class="meal-icon">🌅</span>
+          <span>Breakfast</span>
+        </div>
+        <button class="add-food-btn" (click)="addFood('breakfast')">Add Food</button>
+      </div>
+      <div class="meal-item">
+        <div class="meal-name">Oatmeal with Berries</div>
+        <div class="meal-calories">320 cal</div>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-header">
+        <div class="meal-title">
+          <span class="meal-icon">😋</span>
+          <span>Lunch</span>
+        </div>
+        <button class="add-food-btn" (click)="addFood('lunch')">Add Food</button>
+      </div>
+      <div class="meal-item">
+        <div class="meal-name">Quinoa Buddha Bowl</div>
+        <div class="meal-calories">420 cal</div>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-header">
+        <div class="meal-title">
+          <span class="meal-icon">🍽️</span>
+          <span>Dinner</span>
+        </div>
+        <button class="add-food-btn" onclick="addFood('dinner')">Add Food</button>
+      </div>
+      <div class="meal-item">
+        <div class="meal-name">Grilled Salmon</div>
+        <div class="meal-calories">280 cal</div>
       </div>
     </div>
   </div>

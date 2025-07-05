@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="welcome-section">
+    <h1 class="welcome-title">Scan Your Food</h1>
+    <p class="welcome-subtitle">Use your camera to scan barcodes or take photos of food items for instant nutritional information</p>
+  </div>
+
+  <div class="scanner-section">
+    <div class="scan-area" [class.scanning]="isScanning" (click)="startScanning()">
+      <div class="barcode-visual">
+        <div class="scan-line"></div>
+      </div>
+    </div>
+    <div class="scan-instructions">
+      Position the barcode within the frame to scan automatically
+    </div>
+    <div class="scan-controls">
+      <button class="btn btn-primary" (click)="startScanning()">Start Scanning</button>
+      <button class="btn btn-secondary" (click)="resetScanner()">Reset</button>
+    </div>
+  </div>
+
+  <div class="methods-section">
+    <h2 class="section-title">Scanning Methods</h2>
+    <div class="methods-grid">
+      <div class="method-card" (click)="scanBarcode()">
+        <div class="method-icon">📱</div>
+        <div class="method-title">Barcode Scanner</div>
+        <div class="method-description">Scan product barcodes for instant nutritional data</div>
+      </div>
+
+      <div class="method-card" (click)="takePhoto()">
+        <div class="method-icon">📸</div>
+        <div class="method-title">Photo Recognition</div>
+        <div class="method-description">Take a photo and let AI identify your food</div>
+      </div>
+
+      <div class="method-card" (click)="voiceSearch()">
+        <div class="method-icon">🎤</div>
+        <div class="method-title">Voice Search</div>
+        <div class="method-description">Say the name of your food item to search</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recent-scans">
+    <h2 class="section-title">Recent Scans</h2>
+    <div class="scan-history">
+      <div class="scan-item" *ngFor="let scan of recentScans">
+        <div class="scan-info">
+          <div class="scan-name">{{ scan.name }}</div>
+          <div class="scan-details"><!--{{ scan.method }} • -->{{ scan.time }}</div>
+        </div>
+        <div class="scan-calories">{{ scan.calories }} cal</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Camera simulation overlay -->
+<div class="camera-overlay" [style.display]="isScanning ? 'flex' : 'none'">
+  <div class="camera-frame">
+    <div class="camera-corners corner-tl"></div>
+    <div class="camera-corners corner-tr"></div>
+    <div class="camera-corners corner-bl"></div>
+    <div class="camera-corners corner-br"></div>
+    <button class="camera-close" (click)="closeCamera()">×</button>
+    <div class="scanning-text">Scanning for barcode...</div>
+  </div>
+</div>

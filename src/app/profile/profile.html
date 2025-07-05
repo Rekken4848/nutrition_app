@@ -1,0 +1,73 @@
+<div class="container">
+  <div class="profile-header">
+    <div class="profile-avatar" (click)="changeAvatar()">
+      👤
+      <button class="avatar-edit">📷</button>
+    </div>
+    <h1 class="profile-name">{{ user.firstName }} {{ user.lastName }}</h1>
+    <p class="profile-email">{{ user.email }}</p>
+    <div class="profile-stats">
+      <div class="stat-item" *ngFor="let s of stats">
+        <div class="stat-value">{{ s.value }}</div>
+        <div class="stat-label">{{ s.label }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="achievements">
+    <h2>🏆 Your Achievements</h2>
+    <div class="achievement-grid">
+      <div class="achievement-item" *ngFor="let a of achievements">
+        <div class="achievement-icon">{{ a.icon }}</div>
+        <div class="achievement-name">{{ a.name }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h2 class="section-title">Personal Information</h2>
+    <form #f="ngForm">
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" name="firstName" [(ngModel)]="user.firstName"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" name="lastName" [(ngModel)]="user.lastName"></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" name="email" [(ngModel)]="user.email"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Age</label><input type="number" name="age" [(ngModel)]="user.age" min="13" max="120"></div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select name="gender" [(ngModel)]="user.gender">
+            <option *ngFor="let g of ['male', 'female', 'other', 'prefer-not-to-say']" [value]="g">{{ g }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Height (cm)</label><input type="number" name="height" [(ngModel)]="user.height" min="100" max="250"></div>
+        <div class="form-group"><label>Weight (kg)</label><input type="number" name="weight" [(ngModel)]="user.weight" min="30" max="300"></div>
+      </div>
+      <div class="form-group">
+        <label>Activity Level</label>
+        <select name="activityLevel" [(ngModel)]="user.activityLevel">
+          <option *ngFor="let lvl of ['Sedentary (little/no exercise)','Light (light exercise 1-3 days/week)','Moderate (moderate exercise 3-5 days/week)','Active (hard exercise 6-7 days/week)','Very Active (very hard exercise, physical job)']" [value]="lvl">{{ lvl }}</option>
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <div class="settings-section">
+    <h2 class="section-title">Daily Goals</h2>
+    <div class="goals-grid">
+      <div class="goal-card" *ngFor="let g of goals">
+        <div class="goal-icon">{{ g.icon }}</div>
+        <div class="goal-value">{{ g.value }}</div>
+        <div class="goal-label">{{ g.label }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="button-group">
+    <button class="btn" (click)="saveProfile($event)">Save Changes</button>
+    <button class="btn btn-secondary" (click)="resetForm()">Reset</button>
+    <button class="btn btn-danger" (click)="deleteAccount()">Delete Account</button>
+  </div>
+</div>

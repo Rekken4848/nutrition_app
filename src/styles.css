@@ -41,7 +41,7 @@
 
 /* Login */
 
-.login-body {
+/*.login-body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, var(--green) 0%, var(--tan) 100%);
     min-height: 100vh;
@@ -51,10 +51,20 @@
     justify-content: center;
     padding: 20px;
     position: relative;
+}*/
+
+.login-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--green) 0%, var(--tan) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
     .login-body {
         padding: 15px;
     }
@@ -64,7 +74,7 @@
     .login-body {
         padding: 10px;
     }
-}
+}*/
 
 /* Landing */
 
@@ -90,5 +100,41 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--cream);
     line-height: 1.6;
+    color: var(--black);
+}
+
+/* Food List */
+
+.food-list-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--cream);
+    line-height: 1.6;
+    color: var(--black);
+}
+
+/* Profile */
+
+.profile-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--cream);
+    line-height: 1.6;
+    color: var(--black);
+}
+
+/* Kitchen */
+
+.kitchen-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--green) 0%, #9BC53D 100%);
+    min-height: 100vh;
+    color: var(--black);
+}
+
+/* Scan food */
+
+.scan-food-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--green) 0%, #9BC53D 100%);
+    min-height: 100vh;
     color: var(--black);
 }

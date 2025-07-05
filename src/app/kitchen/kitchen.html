@@ -1,0 +1,100 @@
+<div class="container">
+  <div class="welcome-section">
+    <h1 class="welcome-title">Smart Kitchen Hub</h1>
+    <p class="welcome-subtitle">
+      Monitor, weigh, and optimize your nutrition with IoT-powered kitchen devices
+    </p>
+  </div>
+
+  <div class="status-indicators">
+    <div class="status-badge">🟢 4 Devices Connected</div>
+    <div class="status-badge">🔄 Last Sync: 2 min ago</div>
+  </div>
+
+  <div class="devices-section">
+    <h2 class="section-title">Your Smart Kitchen Devices</h2>
+    <div class="devices-grid">
+      <div class="device-card" routerLink="body-scale">
+        <div class="device-icon">⚖️</div>
+        <div class="device-title">Smart Body Scale</div>
+        <div class="device-description">
+          Track your weight, BMI, and body composition with precision measurements and progress analytics.
+        </div>
+        <div class="device-status">
+          <div class="status-indicator">
+            <div class="status-dot online"></div>
+            <span>Connected</span>
+          </div>
+          <span>Last: 68.5 kg</span>
+        </div>
+      </div>
+
+      <div class="device-card" routerLink="food-scale">
+        <div class="device-icon">🍽️</div>
+        <div class="device-title">Food Scale</div>
+        <div class="device-description">
+          Weigh ingredients accurately and get instant nutritional information with automatic food recognition.
+        </div>
+        <div class="device-status">
+          <div class="status-indicator">
+            <div class="status-dot online"></div>
+            <span>Ready</span>
+          </div>
+          <span>Precision: ±1g</span>
+        </div>
+      </div>
+
+      <div class="device-card" routerLink="smart-fridge">
+        <div class="device-icon">❄️</div>
+        <div class="device-title">Smart Refrigerator</div>
+        <div class="device-description">
+          Monitor food freshness, track expiration dates, and get alerts when items need attention.
+        </div>
+        <div class="device-status">
+          <div class="status-indicator">
+            <div class="status-dot warning"></div>
+            <span>3 items expiring</span>
+          </div>
+          <span>Temp: 4°C</span>
+        </div>
+      </div>
+
+      <div class="device-card" routerLink="ai-recommendations">
+        <div class="device-icon">🤖</div>
+        <div class="device-title">AI Chef Assistant</div>
+        <div class="device-description">
+          Get personalized recipe recommendations and nutritional advice based on your goals and available ingredients.
+        </div>
+        <div class="device-status">
+          <div class="status-indicator">
+            <div class="status-dot online"></div>
+            <span>Available</span>
+          </div>
+          <span>5 new recipes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <h2 class="section-title">Quick Actions</h2>
+    <div class="actions-grid">
+      <a routerLink="/scan-food" class="action-btn">
+        <div class="action-icon">📱</div>
+        <div class="action-label">Scan Food</div>
+      </a>
+      <a class="action-btn">
+        <div class="action-icon">📅</div>
+        <div class="action-label">Plan Meals</div>
+      </a>
+      <a class="action-btn">
+        <div class="action-icon">📊</div>
+        <div class="action-label">Track Progress</div>
+      </a>
+      <a class="action-btn">
+        <div class="action-icon">⚙️</div>
+        <div class="action-label">Settings</div>
+      </a>
+    </div>
+  </div>
+</div>
