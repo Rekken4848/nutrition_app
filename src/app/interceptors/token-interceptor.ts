@@ -1,11 +1,16 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { catchError, throwError } from 'rxjs';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('authToken');
+  //const token = localStorage.getItem('authToken');
   const router = inject(Router);
+  const jwtHelper = new JwtHelperService();
+
+  const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+
   console.log('Interceptor ejecutado para:', req.url, 'Token:', token);
 
   const excludedRoutes: { url: string; method: string }[] = [
@@ -45,15 +50,20 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     return next(cloned);
   }*/
 
-  console.log("Previo authReq");
+  if (jwtHelper.isTokenExpired(token)) {
+    localStorage.removeItem('authToken');
+    sessionStorage.removeItem('authToken');
+    localStorage.removeItem('userEmail');
+    sessionStorage.removeItem('userEmail');
+    router.navigate(['/login']);
+    return throwError(() => new Error('Token expirado'));
+  }
 
   const authReq = req.clone({
     setHeaders: {
       Authorization: `Bearer ${token}`
     }
   });
-
-  console.log("Previo authReq");
 
   //return next(req);
   return next(authReq).pipe(

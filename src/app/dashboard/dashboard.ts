@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { UserService } from '../services/user-service';
+import { UserStatsService } from '../services/user-stats-service';
+import { UserWithStatsDto } from '../models/user-with-stats-dto.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -75,16 +76,27 @@ export class Dashboard {
     // Aquí podrías hacer llamadas a un servicio para actualizar datos
   }
 
+  userWithStatsDto: UserWithStatsDto | null = null;
+
+  constructor(private userStatsService: UserStatsService) { }
+
   ngOnInit(): void {
     //let userService: UserService;
     document.body.classList.add('dashboard-body');
-    /*const email = localStorage.getItem('userEmail');
+    const email = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
     if (email) {
-      this.userService.getUserByEmail(email).subscribe({
-        next: (user) => this.user = user,
-        error: (err) => console.error('Error cargando usuario', err)
+      this.userStatsService.getUserAndStatsByEmail(email).subscribe({
+        next: (userWithStatsDto) => {
+          this.userWithStatsDto = userWithStatsDto
+          console.log("Usuario con Stats dashboard: ", userWithStatsDto);
+        },
+        error: (err) => {
+          console.error('Error cargando usuario', err)
+        }
       });
-    }*/
+    }
+
+
   }
 
   ngOnDestroy(): void {

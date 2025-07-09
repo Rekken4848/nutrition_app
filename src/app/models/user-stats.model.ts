@@ -1,7 +1,7 @@
 export class UserStats {
     id?: number;
     user_id!: { id: number };
-    profile_image?: File;
+    profile_image?: string; //base64
     age!: string;
     gender!: 'male' | 'female' | 'other' | 'prefer-not-to-say';
     height!: number;

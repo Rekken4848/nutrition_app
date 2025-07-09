@@ -130,14 +130,20 @@ export class Login {
     console.log("Valido")
 
     this.loading = true;
-    const { email, password } = this.loginForm.value;
+    const { email, password, rememberMe } = this.loginForm.value;
     const credentials: string = email;
 
     this.authService.login(credentials, password).subscribe({
       next: (res) => {
         console.log('Login correcto', res);
-        localStorage.setItem('authToken', res.token);
-        localStorage.setItem('userEmail', res.user.email);
+        if (rememberMe) {
+          localStorage.setItem('authToken', res.token);
+          localStorage.setItem('userEmail', res.user.email);
+        } else {
+          sessionStorage.setItem('authToken', res.token);
+          sessionStorage.setItem('userEmail', res.user.email);
+        }
+
         this.router.navigate(['/dashboard']);
       },
       error: err => {
@@ -225,10 +231,12 @@ export class Login {
 
             console.log(userStatsToCreate)
 
-            localStorage.setItem('authToken', secondres.token);
-            localStorage.setItem('userEmail', secondres.user.email);
+            //localStorage.setItem('authToken', secondres.token);
+            //localStorage.setItem('userEmail', secondres.user.email);
+            sessionStorage.setItem('authToken', secondres.token);
+            sessionStorage.setItem('userEmail', secondres.user.email);
 
-            this.userStatsService.createUserStats(userStatsToCreate).subscribe({
+            this.userStatsService.createUserStats(secondres.user.id, userStatsToCreate).subscribe({
               next: (finalres) => {
                 console.log('Usuario Stats creado correctamente', finalres);
                 this.router.navigate(['/dashboard']);

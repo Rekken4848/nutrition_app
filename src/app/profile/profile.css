@@ -34,6 +34,13 @@
     box-shadow: 0 10px 30px rgba(129, 177, 74, 0.3);
 }
 
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 .avatar-edit {
     position: absolute;
     bottom: 5px;
