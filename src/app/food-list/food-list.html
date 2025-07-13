@@ -21,29 +21,24 @@
 
   <div class="search-section">
     <div class="search-bar">
-      <input type="text" class="search-input" placeholder="Search for foods..." [(ngModel)]="currentSearch" (input)="onSearchChange(currentSearch)">
-      <button class="search-btn" (click)="filterFoods()">Search</button>
+      <input type="text" class="search-input" placeholder="Search for foods..." [(ngModel)]="currentSearch"
+        (input)="onSearchChange(currentSearch)">
+      <button class="search-btn" (click)="searchNewFoods(currentSearch)">Search</button>
     </div>
 
     <div class="category-filters">
-      <button class="category-btn" 
-              [ngClass]="{ 'active': currentCategory === 'all' }"
-              (click)="onCategorySelect('all')">All Foods</button>
-      <button class="category-btn" 
-              [ngClass]="{ 'active': currentCategory === 'fruits' }"
-              (click)="onCategorySelect('fruits')">Fruits</button>
-      <button class="category-btn" 
-              [ngClass]="{ 'active': currentCategory === 'vegetables' }"
-              (click)="onCategorySelect('vegetables')">Vegetables</button>
-      <button class="category-btn" 
-              [ngClass]="{ 'active': currentCategory === 'proteins' }"
-              (click)="onCategorySelect('proteins')">Proteins</button>
-      <button class="category-btn" 
-              [ngClass]="{ 'active': currentCategory === 'grains' }"
-              (click)="onCategorySelect('grains')">Grains</button>
-      <button class="category-btn" 
-              [ngClass]="{ 'active': currentCategory === 'dairy' }"
-              (click)="onCategorySelect('dairy')">Dairy</button>
+      <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'all' }"
+        (click)="onCategorySelect('all')">All Foods</button>
+      <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'fruits' }"
+        (click)="onCategorySelect('fruits')">Fruits</button>
+      <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'vegetables' }"
+        (click)="onCategorySelect('vegetables')">Vegetables</button>
+      <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'proteins' }"
+        (click)="onCategorySelect('proteins')">Proteins</button>
+      <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'grains' }"
+        (click)="onCategorySelect('grains')">Grains</button>
+      <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'dairy' }"
+        (click)="onCategorySelect('dairy')">Dairy</button>
     </div>
   </div>
 
@@ -52,7 +47,9 @@
       <table>
         <thead>
           <tr>
+            <th>Image</th>
             <th>Food Name</th>
+            <th>Quantity</th>
             <th>Serving Size</th>
             <th>Calories</th>
             <th>Protein (g)</th>
@@ -63,7 +60,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngIf="filteredFoods.length === 0">
+          <tr *ngIf="filteredFoodListApi.length === 0">
             <td colspan="8">
               <div class="no-results">
                 <h3>No foods found</h3>
@@ -71,15 +68,20 @@
               </div>
             </td>
           </tr>
-          <tr *ngFor="let food of filteredFoods">
+          <tr *ngFor="let food of filteredFoodListApi">
+            <td>
+              <img [src]="food.image" alt="{{ food.name }}"
+                style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
+            </td>
             <td class="food-name">{{ food.name }}</td>
-            <td class="serving-size">{{ food.serving }}</td>
-            <td class="nutrition-value">{{ food.calories }}</td>
-            <td class="nutrition-value">{{ food.protein }}</td>
-            <td class="nutrition-value">{{ food.carbs }}</td>
-            <td class="nutrition-value">{{ food.fat }}</td>
-            <td class="nutrition-value">{{ food.fiber }}</td>
-            <td><button class="add-btn" (click)="addFood(food.id)">Add</button></td>
+            <td>{{ food.quantity }}</td>
+            <td class="serving-size">{{ food.serving_size }}</td>
+            <td class="nutrition-value">{{ food.calories_per_100g }}</td>
+            <td class="nutrition-value">{{ food.proteins_per_100g }}</td>
+            <td class="nutrition-value">{{ food.carbs_per_100g }}</td>
+            <td class="nutrition-value">{{ food.fat_per_100g }}</td>
+            <td class="nutrition-value">{{ food.fiber_per_100g }}</td>
+            <td><button class="add-btn" (click)="addFood(1)">Add</button></td>
           </tr>
         </tbody>
       </table>

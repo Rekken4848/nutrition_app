@@ -18,6 +18,10 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     { url: '/users', method: 'POST' }
   ];
 
+  if (req.url === '/cgi/search.pl') {
+    return next(req);
+  }
+
   /*const isExcluded = excludedRoutes.some(
     route => req.url.includes(route.url) && req.method === route.method
   );*/

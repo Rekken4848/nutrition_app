@@ -138,3 +138,23 @@
     min-height: 100vh;
     color: var(--black);
 }
+
+/* Ai Assistant */
+
+.ai-assistant-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    color: var(--black);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Body Scale */
+
+.body-scale-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    color: var(--black);
+}

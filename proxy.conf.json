@@ -1,0 +1,10 @@
+{
+  "/cgi": {
+    "target": "https://world.openfoodfacts.org",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}
