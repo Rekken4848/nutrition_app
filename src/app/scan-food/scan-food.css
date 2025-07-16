@@ -361,6 +361,284 @@ body {
     text-align: center;
 }
 
+/* Product Modal Styles */
+.product-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /*display: none;*/
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 2000;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.product-modal.show {
+    display: flex;
+}
+
+.product-modal-content {
+    background: var(--white);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    margin: 2rem 0;
+    color: var(--black);
+}
+
+.product-modal-header {
+    position: relative;
+    background: linear-gradient(135deg, var(--green) 0%, #9BC53D 100%);
+    padding: 2rem;
+    text-align: center;
+    border-radius: 20px 20px 0 0;
+    color: var(--white);
+}
+
+.product-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--white);
+    transition: all 0.3s ease;
+}
+
+.product-modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.product-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 15px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.product-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.product-brand {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+
+.product-code {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-family: monospace;
+}
+
+.product-modal-body {
+    padding: 2rem;
+}
+
+.product-section {
+    margin-bottom: 2rem;
+}
+
+.product-section-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--green);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--green);
+    padding-bottom: 0.5rem;
+}
+
+.product-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.product-info-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    border-left: 4px solid var(--green);
+}
+
+.product-info-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.3rem;
+}
+
+.product-info-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.nutrition-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--green) 0%, #9BC53D 100%);
+    color: var(--white);
+    border-radius: 15px;
+}
+
+.nutrition-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.nutrition-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.nutriscore {
+    /*display: inline-block;*/
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    /*color: var(--white);*/
+    margin-top: 0.5rem;
+}
+
+.nutriscore-a {
+    background: #038141;
+}
+
+.nutriscore-b {
+    background: #85BB2F;
+}
+
+.nutriscore-c {
+    background: #FECB02;
+    color: var(--black);
+}
+
+.nutriscore-d {
+    background: #EE8100;
+}
+
+.nutriscore-e {
+    background: #E63E11;
+}
+
+.allergens-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.allergen-tag {
+    padding: 0.5rem 1rem;
+    background: var(--red-orange);
+    color: var(--white);
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.ingredients-text {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.countries-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.country-tag {
+    padding: 0.5rem 1rem;
+    background: var(--tan);
+    color: var(--black);
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.product-modal-footer {
+    padding: 2rem;
+    border-top: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    border-radius: 0 0 20px 20px;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-add-product {
+    background: var(--green);
+    color: var(--white);
+    padding: 1rem 3rem;
+    border: none;
+    border-radius: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-add-product:hover {
+    background: #6fa03a;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(129, 177, 74, 0.3);
+}
+
+.btn-cancel {
+    background: transparent;
+    color: #666;
+    border: 2px solid #e0e0e0;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.btn-cancel:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .welcome-title {
@@ -383,6 +661,32 @@ body {
     .barcode-visual {
         width: 150px;
         height: 90px;
+    }
+
+    .product-modal {
+        padding: 1rem;
+    }
+
+    .product-modal-content {
+        margin: 1rem 0;
+    }
+
+    .product-modal-header,
+    .product-modal-body,
+    .product-modal-footer {
+        padding: 1.5rem;
+    }
+
+    .product-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nutrition-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-modal-footer {
+        flex-direction: column;
     }
 }
 
@@ -412,5 +716,14 @@ body {
     .camera-frame {
         width: 280px;
         height: 200px;
+    }
+
+    .nutrition-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .allergens-list,
+    .countries-list {
+        justify-content: center;
     }
 }

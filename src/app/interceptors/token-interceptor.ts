@@ -18,7 +18,8 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     { url: '/users', method: 'POST' }
   ];
 
-  if (req.url === '/cgi/search.pl') {
+  if (req.url === '/cgi/search.pl' || req.url === 'https://api.openai.com/v1/chat/completions' || req.url.startsWith('/api/v0/product/')) {
+    console.log("Interceptor funciona con api externa")
     return next(req);
   }
 

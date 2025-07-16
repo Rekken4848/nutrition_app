@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { BrowserMultiFormatOneDReader, IScannerControls } from '@zxing/browser';
+import { OpenFoodFactApi } from '../open-food-facts/services/open-food-fact-api';
+import { Food } from '../open-food-facts/models/food.model';
 
 interface FoodItem {
   name: string;
@@ -34,7 +37,102 @@ export class ScanFood {
     { name: 'Chicken Breast', calories: 165, protein: 31, carbs: 0, brand: 'Fresh' }
   ];
 
-  startScanning(): void {
+  private codeReader = new BrowserMultiFormatOneDReader();
+  private controls: IScannerControls | null = null;
+
+  product: Food | null = null;
+  showModal = false;
+
+  constructor(private openFoodFactApi: OpenFoodFactApi) { }
+
+  async startScanning() {
+    this.isScanning = true;
+
+    try {
+      // ⚠️ Forzar solicitud de permisos primero
+      await navigator.mediaDevices.getUserMedia({ video: true });
+      // Obtener dispositivos
+      const videoDevices = await BrowserMultiFormatOneDReader.listVideoInputDevices();
+      const deviceId = videoDevices[0]?.deviceId;
+      if (!deviceId) {
+        alert('No se encontró cámara.');
+        this.isScanning = false;
+        return;
+      }
+
+      const videoElem = document.getElementById('video-preview') as HTMLVideoElement;
+
+      this.controls = await this.codeReader.decodeFromVideoDevice(
+        deviceId,
+        videoElem,
+        (result, error, controls) => {
+          if (result) {
+            const barcode = result.getText();
+            console.log('Código escaneado:', barcode);
+            this.fetchProduct(barcode);
+            controls.stop();
+            this.isScanning = false;
+          } else if (error && error.name !== 'NotFoundException') {
+            // errores menores (código no detectado) se ignoran
+            //console.error('Error en escaneo:', error);
+          }
+        }
+      );
+
+    } catch (err) {
+      console.error('Error al iniciar escáner:', err);
+      this.isScanning = false;
+    }
+  }
+
+  stopScanning() {
+    this.controls?.stop();
+    this.isScanning = false;
+  }
+
+  resetScanner() {
+    this.stopScanning();
+  }
+
+  fetchProduct(barcode: string) {
+    console.log(`Buscando producto: ${barcode}`);
+    // Aquí tu llamada a la API
+    this.openFoodFactApi.getProductByBarcode(barcode).subscribe({
+      next: (product) => {
+        console.log('Producto encontrado: ', product);
+        this.product = product;
+        this.showModal = true;
+      },
+      error: (err) => {
+        console.log('Producto no encontrado: ', err);
+      }
+    });
+  }
+
+  /*get nutritionItems() {
+    return [
+      { label: 'Calories', value: this.product?.calories },
+      { label: 'Proteins', value: this.product?.proteins },
+      { label: 'Carbs', value: this.product?.carbs },
+      { label: 'Fat', value: this.product?.fat },
+      { label: 'Sugars', value: this.product?.sugars },
+      { label: 'Fiber', value: this.product?.fiber },
+    ];
+  }*/
+
+  closeProductModal() {
+    this.showModal = false;
+    this.product = null;
+  }
+
+  addProduct() {
+    if (!this.product) return;
+    console.log('Producto añadido:', this.product);
+    // Llamada api guardar
+    this.closeProductModal();
+  }
+
+  startScanning2(): void {
     if (this.isScanning) return;
     this.isScanning = true;
     const overlay = document.getElementById('cameraOverlay');
@@ -51,7 +149,7 @@ export class ScanFood {
     if (overlay) overlay.style.display = 'none';
   }
 
-  resetScanner(): void {
+  resetScanner2(): void {
     this.isScanning = false;
   }
 
@@ -94,5 +192,6 @@ export class ScanFood {
 
   ngOnDestroy(): void {
     document.body.classList.remove('scan-food-body');
+    this.stopScanning();
   }
 }

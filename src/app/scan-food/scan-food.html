@@ -1,11 +1,14 @@
 <div class="container">
   <div class="welcome-section">
     <h1 class="welcome-title">Scan Your Food</h1>
-    <p class="welcome-subtitle">Use your camera to scan barcodes or take photos of food items for instant nutritional information</p>
+    <p class="welcome-subtitle">Use your camera to scan barcodes or take photos of food items for instant nutritional
+      information</p>
   </div>
 
   <div class="scanner-section">
     <div class="scan-area" [class.scanning]="isScanning" (click)="startScanning()">
+      <video id="video-preview" autoplay muted playsinline
+        style="width: 100%; height: 100%; object-fit: cover;"></video>
       <div class="barcode-visual">
         <div class="scan-line"></div>
       </div>
@@ -57,7 +60,7 @@
 </div>
 
 <!-- Camera simulation overlay -->
-<div class="camera-overlay" [style.display]="isScanning ? 'flex' : 'none'">
+<!--div class="camera-overlay" [style.display]="isScanning ? 'flex' : 'none'">
   <div class="camera-frame">
     <div class="camera-corners corner-tl"></div>
     <div class="camera-corners corner-tr"></div>
@@ -65,5 +68,118 @@
     <div class="camera-corners corner-br"></div>
     <button class="camera-close" (click)="closeCamera()">×</button>
     <div class="scanning-text">Scanning for barcode...</div>
+  </div>
+</div-->
+<!-- Product Information Modal -->
+<div class="product-modal" *ngIf="showModal">
+  <div class="product-modal-content">
+    <div class="product-modal-header">
+      <button class="product-modal-close" (click)="closeProductModal()">&times;</button>
+      <img [src]="product?.image || '/placeholder.svg?height=120&width=120'" class="product-image"
+        alt="Product Image" />
+      <h2 class="product-name">{{ product?.name }}</h2>
+      <p class="product-brand">{{ product?.brand }}</p>
+      <p class="product-code">Code: {{ product?.code }}</p>
+    </div>
+
+    <div class="product-modal-body">
+      <!-- Basic Information -->
+      <div class="product-section">
+        <h3 class="product-section-title">📦 Product Information</h3>
+        <div class="product-info-grid">
+          <div class="product-info-item">
+            <div class="product-info-label">Quantity</div>
+            <div class="product-info-value">
+              {{ product?.quantity || (product?.product_quantity + ' ' + product?.product_quantity_unit) }}
+            </div>
+          </div>
+          <div class="product-info-item">
+            <div class="product-info-label">Serving Size</div>
+            <div class="product-info-value">{{ product?.serving_size || '—' }}</div>
+          </div>
+          <div class="product-info-item">
+            <div class="product-info-label">Nutri-Score</div>
+            <div class="product-info-value">
+              <span class="nutriscore">{{ product?.nutriscore || '—' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nutrition Facts -->
+      <div class="product-section">
+        <h3 class="product-section-title">📊 Nutrition Facts (per 100g)</h3>
+        <div class="nutrition-grid">
+          <div class="nutrition-item">
+            <span class="nutrition-value">{{ product?.calories_per_100g || '—' }}</span>
+            <span class="nutrition-label">Calories</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-value">{{ product?.proteins_per_100g || '—' }}g</span>
+            <span class="nutrition-label">Proteins</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-value">{{ product?.carbs_per_100g || '—' }}g</span>
+            <span class="nutrition-label">Carbs</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-value">{{ product?.fat_per_100g || '—' }}g</span>
+            <span class="nutrition-label">Fat</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-value">{{ product?.sugars_per_100g || '—' }}g</span>
+            <span class="nutrition-label">Sugars</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-value">{{ product?.fiber_per_100g || '—' }}g</span>
+            <span class="nutrition-label">Fiber</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Allergens -->
+      <div class="product-section">
+        <h3 class="product-section-title">⚠️ Allergens</h3>
+        <div class="allergens-list">
+          <ng-container *ngIf="product?.allergens?.length; else noAllergens">
+            <span *ngFor="let allergen of product?.allergens">{{ allergen }}</span>
+          </ng-container>
+          <ng-template #noAllergens>
+            <span>No allergens listed.</span>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Ingredients -->
+      <div class="product-section">
+        <h3 class="product-section-title">🧪 Ingredients</h3>
+        <div class="ingredients-text">
+          {{ product?.ingredients || 'Ingredients list will be displayed here...' }}
+        </div>
+      </div>
+
+      <!-- Countries -->
+      <div class="product-section">
+        <h3 class="product-section-title">🌍 Available Countries</h3>
+        <div class="countries-list">
+          <ng-container *ngIf="product?.countries?.length; else noCountries">
+            <span *ngFor="let country of product?.countries">{{ country }}</span>
+          </ng-container>
+          <ng-template #noCountries>
+            <span>No countries listed.</span>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-modal-footer">
+      <button class="btn-cancel" (click)="closeProductModal()">Cancel</button>
+      <button class="btn-add-product" (click)="addProduct()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+        </svg>
+        Add Product
+      </button>
+    </div>
   </div>
 </div>

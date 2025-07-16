@@ -5,10 +5,21 @@
   </div>
 
   <div class="search-filters">
+    <div class="search-filter-header">
+      <h2 class="section-title">Browse Recipes</h2>
+      <button class="create-recipe-btn" (click)="openCreateRecipeModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+        </svg>
+        Create Recipe
+      </button>
+    </div>
+
     <div class="filter-row">
       <div class="search-box">
         <label for="recipeSearch">Search Recipes</label>
-        <input id="recipeSearch" type="text" [(ngModel)]="searchTerm" (input)="filterRecipes()" placeholder="Search recipes..." />
+        <input id="recipeSearch" type="text" [(ngModel)]="searchTerm" (input)="filterRecipes()"
+          placeholder="Search recipes..." />
       </div>
 
       <div class="filter-group">
@@ -74,6 +85,308 @@
         </div>
         <button class="btn" (click)="viewRecipe(recipe.id)">View Recipe</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Recipe Modal -->
+<div class="modal-overlay" #createRecipeModal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Create New Recipe</h2>
+      <button class="close-btn" (click)="closeCreateRecipeModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <form #createRecipeForm="ngForm" (ngSubmit)="submitRecipe($event)">
+        <!-- Basic Information -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            📝 Basic Information
+          </h3>
+
+          <div class="form-group">
+            <label for="recipeName">Recipe Name *</label>
+            <input type="text" #recipeName name="recipeName" [(ngModel)]="recipe.recipeName" placeholder="Enter recipe name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="recipeDescription">Description</label>
+            <textarea #recipeDescription name="recipeDescription" [(ngModel)]="recipe.recipeDescription"
+              placeholder="Brief description of your recipe"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="recipeCategory">Category *</label>
+              <select #recipeCategory name="recipeCategory" [(ngModel)]="recipe.recipeCategory" required>
+                <option value="">Select category</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+                <option value="dessert">Dessert</option>
+                <option value="beverage">Beverage</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="recipeDiet">Diet Type</label>
+              <select #recipeDiet name="recipeDiet" [(ngModel)]="recipe.recipeDiet">
+                <option value="">Select diet type</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="keto">Keto</option>
+                <option value="paleo">Paleo</option>
+                <option value="gluten-free">Gluten-Free</option>
+                <option value="dairy-free">Dairy-Free</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="prepTime">Prep Time (minutes) *</label>
+              <input type="number" #prepTime name="prepTime" [(ngModel)]="recipe.prepTime" placeholder="15" min="1" required>
+            </div>
+
+            <div class="form-group">
+              <label for="cookTime">Cook Time (minutes)</label>
+              <input type="number" #cookTime name="cookTime" [(ngModel)]="recipe.cookTime" placeholder="20" min="0">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="servings">Servings *</label>
+              <input type="number" #servings name="servings" [(ngModel)]="recipe.servings" placeholder="4" min="1" required>
+            </div>
+
+            <div class="form-group">
+              <label for="difficulty">Difficulty</label>
+              <select #difficulty name="difficulty" [(ngModel)]="recipe.difficulty">
+                <option value="">Select difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recipe Image/Emoji -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            🎨 Recipe Visual
+          </h3>
+
+          <div class="image-selection-tabs">
+            <button type="button" class="tab-btn" [class.active]="activeTab === 'emoji'" (click)="switchTab('emoji')">
+              😋 Choose Emoji
+            </button>
+            <button type="button" class="tab-btn" [class.active]="activeTab === 'image'" (click)="switchTab('image')">
+              📷 Upload Image
+            </button>
+          </div>
+
+          <div #emojiTab class="tab-content" [class.active]="activeTab === 'emoji'">
+            <div class="emoji-grid">
+              <div class="emoji-option" (click)="selectEmoji($event, '🍎')">🍎</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥗')">🥗</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍝')">🍝</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍕')">🍕</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍔')">🍔</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🌮')">🌮</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍜')">🍜</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍲')">🍲</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥘')">🥘</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍛')">🍛</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍣')">🍣</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍤')">🍤</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🐟')">🐟</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥩')">🥩</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍗')">🍗</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥓')">🥓</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥞')">🥞</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🧇')">🧇</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥖')">🥖</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍞')">🍞</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥨')">🥨</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🧀')">🧀</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥚')">🥚</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥛')">🥛</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍰')">🍰</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🧁')">🧁</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍪')">🍪</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍩')">🍩</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥜')">🥜</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍓')">🍓</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍌')">🍌</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍊')">🍊</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥑')">🥑</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥕')">🥕</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥬')">🥬</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥒')">🥒</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍅')">🍅</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🫐')">🫐</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥝')">🥝</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍇')">🍇</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍑')">🍑</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍒')">🍒</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥭')">🥭</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍍')">🍍</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥥')">🥥</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🌶️')">🌶️</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🫒')">🫒</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🧄')">🧄</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🧅')">🧅</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥔')">🥔</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍠')">🍠</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🌽')">🌽</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥦')">🥦</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍄')">🍄</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '☕')">☕</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🍵')">🍵</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🧃')">🧃</div>
+              <div class="emoji-option" (click)="selectEmoji($event, '🥤')">🥤</div>
+            </div>
+
+            <div #selectedEmojiPreview class="selected-emoji-preview" style="display: none;">
+              <div class="selected-emoji" #selectedEmojiDisplay></div>
+              <div>
+                <strong>Selected Emoji</strong>
+                <p>This will be your recipe's visual representation</p>
+              </div>
+            </div>
+
+            <input type="hidden" #selectedEmoji name="selectedEmoji" [(ngModel)]="recipe.emoji">
+          </div>
+
+          <div #imageTab class="tab-content" [class.active]="activeTab === 'image'">
+            <div class="image-upload" (click)="triggerImageUpload()">
+              <input type="file" #recipeImage name="recipeImage" accept="image/*" (change)="previewImage($event)">
+              <div #imageUploadText>
+                <p>📷 Click to upload recipe image</p>
+                <p style="color: #666; font-size: 0.9rem;">Supported formats: JPG, PNG, GIF</p>
+              </div>
+              <img #imagePreview class="image-preview" style="display: none;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Ingredients -->
+        <div class="form-section" >
+          <h3 class="form-section-title">
+            🥕 Ingredients
+          </h3>
+
+          <div class="ingredients-list" #ingredientsList *ngFor="let ing of recipe.ingredients; let i = index">
+            <div class="ingredient-item">
+              <div class="ingredient-number">{{ i + 1 }}</div>
+              <input type="text" class="ingredient-quantity" [(ngModel)]="ing.quantity" placeholder="2" name="ingredientQuantity" required>
+              <select class="ingredient-unit" [(ngModel)]="ing.unit" name="ingredientUnit">
+                <option value="cups">cups</option>
+                <option value="tbsp">tbsp</option>
+                <option value="tsp">tsp</option>
+                <option value="oz">oz</option>
+                <option value="lbs">lbs</option>
+                <option value="g">g</option>
+                <option value="kg">kg</option>
+                <option value="ml">ml</option>
+                <option value="l">l</option>
+                <option value="pieces">pieces</option>
+                <option value="cloves">cloves</option>
+                <option value="pinch">pinch</option>
+                <option value="dash">dash</option>
+                <option value="">-</option>
+              </select>
+              <input type="text" class="ingredient-name" [(ngModel)]="ing.name" placeholder="flour" name="ingredientName" required>
+              <button type="button" *ngIf="recipe.ingredients.length > 1" class="remove-btn" (click)="removeIngredient(i)">×</button>
+            </div>
+          </div>
+
+          <button type="button" class="add-item-btn" (click)="addIngredient()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+            </svg>
+            Add Ingredient
+          </button>
+        </div>
+
+        <!-- Enhanced Instructions -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            👨‍🍳 Instructions
+          </h3>
+
+          <div class="instructions-list" #instructionsList *ngFor="let inst of recipe.instructions; let i = index">
+          <!--div class="instructions-list" #instructionsList *ngFor="let inst of recipe.instructions; let i = index" cdkDrag-->
+            <div class="instruction-item">
+              <div class="instruction-number">{{ i + 1 }}</div>
+              <textarea class="instruction-text" [(ngModel)]="inst.text" placeholder="Describe the first step in detail..."
+                name="instructionText" required></textarea>
+              <input type="text" class="instruction-time" [(ngModel)]="inst.time" placeholder="5 min" name="instructionTime">
+              <button type="button" *ngIf="recipe.instructions.length > 1" class="remove-btn" (click)="removeInstruction(i)">×</button>
+              <!--div class="drag-handle" cdkDragHandle>⋮⋮</div-->
+            </div>
+          </div>
+
+          <button type="button" class="add-item-btn" (click)="addInstruction()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+            </svg>
+            Add Step
+          </button>
+        </div>
+
+        <!-- Nutrition Information -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            📊 Nutrition Information (per serving)
+          </h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="calories">Calories</label>
+              <input type="number" #calories name="calories" [(ngModel)]="recipe.calories"  placeholder="250" min="0">
+            </div>
+
+            <div class="form-group">
+              <label for="protein">Protein (g)</label>
+              <input type="number" #protein name="protein" [(ngModel)]="recipe.protein" placeholder="15" min="0" step="0.1">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="carbs">Carbohydrates (g)</label>
+              <input type="number" #carbs name="carbs" [(ngModel)]="recipe.carbs" placeholder="30" min="0" step="0.1">
+            </div>
+
+            <div class="form-group">
+              <label for="fat">Fat (g)</label>
+              <input type="number" #fat name="fat" [(ngModel)]="recipe.fat" placeholder="8" min="0" step="0.1">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fiber">Fiber (g)</label>
+              <input type="number" #fiber name="fiber" [(ngModel)]="recipe.fiber" placeholder="5" min="0" step="0.1">
+            </div>
+
+            <div class="form-group">
+              <label for="sugar">Sugar (g)</label>
+              <input type="number" #sugar name="sugar" [(ngModel)]="recipe.sugar" placeholder="10" min="0" step="0.1">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" (click)="closeCreateRecipeModal()">Cancel</button>
+          <button type="submit" class="btn btn-save">Save Recipe</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

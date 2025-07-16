@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Openai } from '../openai/services/openai';
 
 @Component({
   selector: 'app-ai-assistant',
@@ -21,6 +22,13 @@ export class AiAssistant {
   userInput = '';
   showPrompts = true;
 
+  conversation: { role: 'user' | 'assistant' | 'system'; content: string }[] = [
+    { role: 'system', content: 'You are a helpful nutrition assistant.' }
+  ];
+
+
+  constructor(private openAi: Openai) { }
+
   /*adjustTextareaHeight(textarea: HTMLTextAreaElement) {
     textarea.style.height = 'auto';
     textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
@@ -33,8 +41,11 @@ export class AiAssistant {
       this.adjustTextareaHeight(textarea);
     }
   }*/
-  adjustTextareaHeight() {
-    const textarea = this.chatTextarea.nativeElement;
+  adjustTextareaHeight(event?: Event) {
+    //const textarea = this.chatTextarea.nativeElement;
+    const textarea = event?.target as HTMLTextAreaElement;
+    if (!textarea) return;
+
     textarea.style.height = 'auto';
     textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
   }
@@ -63,7 +74,7 @@ export class AiAssistant {
       this.addMessage(aiResponse, 'ai');
     }, 1500 + Math.random() * 2000);
   }*/
-  sendMessage() {
+  sendMessage2() {
     const message = this.userInput.trim();
     if (!message || this.isAiTyping) return;
 
@@ -77,6 +88,32 @@ export class AiAssistant {
       this.addMessage(aiResponse, 'ai');
       this.isAiTyping = false;
     }, 1500 + Math.random() * 2000);
+  }
+
+  async sendMessage() {
+    const message = this.userInput.trim();
+    if (!message || this.isAiTyping) return;
+
+    const userMessage: { role: 'user'; content: string } = {
+      role: 'user',
+      content: message
+    };
+    this.conversation.push(userMessage);
+    this.addMessage(message, 'user');
+    this.userInput = '';
+    this.showPrompts = false;
+    this.isAiTyping = true;
+
+    try {
+      const response = await this.openAi.getChatCompletion(this.conversation);
+      this.conversation.push({ role: 'assistant', content: response });
+      this.addMessage(response, 'ai');
+      console.log("Response: ", response)
+    } catch (error) {
+      this.addMessage('❌ Error al obtener respuesta de la IA.', 'ai');
+    } finally {
+      this.isAiTyping = false;
+    }
   }
 
   sendSuggestedMessage(message: string) {

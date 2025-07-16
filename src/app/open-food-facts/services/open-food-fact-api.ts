@@ -63,4 +63,41 @@ export class OpenFoodFactApi {
       })
     );
   }
+
+  getProductByBarcode(barcode: string): Observable<Food | null> {
+    const url = `/api/v0/product/${barcode}.json`;
+
+    return this.http.get<any>(url).pipe(
+      map((res) => {
+        const p = res.product;
+        if (!p) return null;
+
+        return {
+          code: p.code,
+          name: p.product_name || 'Desconocido',
+          brand: p.brands || 'Sin marca',
+          quantity: p.quantity,
+          product_quantity: this.round(p.product_quantity),
+          product_quantity_unit: p.product_quantity_unit,
+          serving_size: p.serving_size,
+          calories_per_serving: this.round(p.nutriments?.['energy-kcal_serving']),
+          calories_per_100g: this.round(p.nutriments?.['energy-kcal_100g']),
+          proteins_per_100g: this.round(p.nutriments?.['proteins_100g']),
+          fat_per_100g: this.round(p.nutriments?.['fat_100g']),
+          carbs_per_100g: this.round(p.nutriments?.['carbohydrates_100g']),
+          sugars_per_100g: this.round(p.nutriments?.['sugars_100g']),
+          fiber_per_100g: this.round(p.nutriments?.['fiber_100g']),
+          image: p.image_front_url,
+          nutriscore: p.nutriscore_grade,
+          allergens: p.allergens_tags || [],
+          ingredients: p.ingredients_text,
+          countries: p.countries_tags || [],
+        } as Food;
+      }),
+      catchError((err) => {
+        console.error(`Error al buscar por código de barras ${barcode}:`, err);
+        return of(null);
+      })
+    );
+  }
 }
