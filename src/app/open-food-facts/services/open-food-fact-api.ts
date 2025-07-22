@@ -16,7 +16,7 @@ export class OpenFoodFactApi {
     return val !== undefined ? Math.round(val * 100) / 100 : undefined;
   }
 
-  searchProducts(term: string, country?: string): Observable<Food[]> {
+  searchProducts(term: string, country?: string, category?: string): Observable<Food[]> {
     let params = new HttpParams()
       .set('search_terms', term)
       .set('search_simple', '1')
@@ -30,6 +30,14 @@ export class OpenFoodFactApi {
         .set('tagtype_0', 'countries')
         .set('tag_contains_0', 'contains')
         .set('tag_0', country.toLowerCase());
+    }
+
+    if (category) {
+      const baseIndex = country ? 1 : 0;
+      params = params
+        .set(`tagtype_${baseIndex}`, 'categories')
+        .set(`tag_contains_${baseIndex}`, 'contains')
+        .set(`tag_${baseIndex}`, category.toLowerCase());
     }
 
     return this.http.get<any>(this.apiUrl, { params }).pipe(
@@ -65,7 +73,7 @@ export class OpenFoodFactApi {
   }
 
   getProductByBarcode(barcode: string): Observable<Food | null> {
-    const url = `/api/v0/product/${barcode}.json`;
+    const url = `/api/v2/product/${barcode}.json`;
 
     return this.http.get<any>(url).pipe(
       map((res) => {

@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Recipe } from '../models/recipe.model';
+import { RecipeService } from '../services/recipe-service';
 
-interface Recipe {
+/*interface Recipe {
   id: number;
   title: string;
   category: string;
@@ -17,7 +19,7 @@ interface Recipe {
   fat: number;
   tags: string[];
   emoji: string;
-}
+}*/
 
 @Component({
   selector: 'app-recipes',
@@ -26,7 +28,7 @@ interface Recipe {
   styleUrl: './recipes.css'
 })
 export class Recipes {
-  recipes: Recipe[] = [
+  /*recipes: Recipe[] = [
     {
       id: 1,
       title: "Quinoa Buddha Bowl",
@@ -140,16 +142,31 @@ export class Recipes {
       emoji: "⚡"
     }
     // ... agrega los demás aquí
-  ];
+  ];*/
 
+  recipes: Recipe[] = [];
   filteredRecipes: Recipe[] = [];
+  selectedRecipe: Recipe | null = null;
   searchTerm: string = '';
   category: string = '';
   diet: string = '';
 
   ngOnInit(): void {
     document.body.classList.add('recipes-body');
-    this.filteredRecipes = this.recipes;
+    const email = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
+    if (email !== null) {
+      this.recipeService.getRecipeByUser(email).subscribe({
+        next: (res) => {
+          console.log(`Myrecipes: `);
+          console.log(res)
+          this.recipes = res
+          this.filteredRecipes = this.recipes;
+        },
+        error: (err) => {
+          console.error('Error cargando api', err)
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -158,9 +175,9 @@ export class Recipes {
 
   filterRecipes(): void {
     this.filteredRecipes = this.recipes.filter(recipe => {
-      const matchesSearch = this.searchTerm === '' || recipe.title.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchesCategory = this.category === '' || recipe.category === this.category;
-      const matchesDiet = this.diet === '' || recipe.diet === this.diet;
+      const matchesSearch = this.searchTerm === '' || recipe.recipeName.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchesCategory = this.category === '' || recipe.recipeCategory === this.category;
+      const matchesDiet = this.diet === '' || recipe.recipeDiet === this.diet;
       return matchesSearch && matchesCategory && matchesDiet;
     });
   }
@@ -221,9 +238,24 @@ Choose how you'd like to create your recipe:
 Which option would you prefer?`);
   }
 
-  viewRecipe(id: number): void {
-    // Lógica de navegación o modal
-    console.log('Viewing recipe ID:', id);
+  viewRecipe(recipe: Recipe): void {
+    this.selectedRecipe = recipe;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeRecipeDetail(): void {
+    this.selectedRecipe = null;
+    document.body.style.overflow = 'auto';
+  }
+
+  selectedIngredients = new Set<number>();
+
+  toggleIngredient(index: number): void {
+    if (this.selectedIngredients.has(index)) {
+      this.selectedIngredients.delete(index);
+    } else {
+      this.selectedIngredients.add(index);
+    }
   }
 
   viewRecipe2(recipeName: string): void {
@@ -291,10 +323,38 @@ Redirecting to recipe details...`);
     carbs: null,
     fat: null,
     fiber: null,
-    sugar: null
+    sugar: null,
+    tags: []
   };
 
-  constructor(private renderer: Renderer2) { }
+  //recipeToCreate: Recipe = new Recipe;
+  recipeToCreate: Recipe = {
+    recipeName: '',
+    recipeDescription: '',
+    recipeCategory: '',
+    recipeDiet: '',
+    prepTime: null as any,
+    cookTime: null as any,
+    servings: null as any,
+    difficulty: '',
+    emoji: '',
+    imageFile: undefined,
+    ingredients: [
+      { quantity: '', unit: '', name: '' }
+    ],
+    instructions: [
+      { stepNumber: 1, text: '', time: '' }
+    ],
+    calories: null as any,
+    protein: null as any,
+    carbs: null as any,
+    fat: null as any,
+    fiber: null as any,
+    sugar: null as any,
+    tags: []
+  };
+
+  constructor(private renderer: Renderer2, private recipeService: RecipeService) { }
 
   openCreateRecipeModal(): void {
     this.renderer.addClass(this.createRecipeModal.nativeElement, 'show');
@@ -305,64 +365,41 @@ Redirecting to recipe details...`);
     this.renderer.removeClass(this.createRecipeModal.nativeElement, 'show');
     document.body.style.overflow = 'auto';
     //this.createRecipeForm.nativeElement.reset();
-    this.createRecipeNgForm.resetForm();
-    this.resetIngredientsList();
-    this.resetInstructionsList();
+    //this.createRecipeNgForm.resetForm();
+    //this.resetIngredientsList();
+    //this.resetInstructionsList();
+    this.resetForm();
+    this.selectedTags = [];
     this.resetImageEmojiSelection();
     this.activeTab = 'emoji';
   }
 
-  resetForm(form: HTMLFormElement) {
-    form.reset();
-    this.recipe = {
+  resetForm() {
+    this.recipeToCreate = {
       recipeName: '',
       recipeDescription: '',
       recipeCategory: '',
       recipeDiet: '',
-      prepTime: null,
-      cookTime: null,
-      servings: null,
+      prepTime: null as any,
+      cookTime: null as any,
+      servings: null as any,
       difficulty: '',
       emoji: '',
-      imageFile: null as File | null,
+      imageFile: undefined,
       ingredients: [
-        {
-          quantity: '',
-          unit: '',
-          name: ''
-        }
+        { quantity: '', unit: '', name: '' }
       ],
       instructions: [
-        {
-          text: '',
-          time: ''
-        }
+        { stepNumber: 1, text: '', time: '' }
       ],
-      calories: null,
-      protein: null,
-      carbs: null,
-      fat: null,
-      fiber: null,
-      sugar: null
+      calories: null as any,
+      protein: null as any,
+      carbs: null as any,
+      fat: null as any,
+      fiber: null as any,
+      sugar: null as any,
+      tags: []
     };
-    //this.imagePreview.nativeElement.style.display = 'none';
-    //this.selectedEmojiInput.nativeElement.value = '';
-    //this.activeTab = 'emoji';
-
-    // Limpiar selección de emoji
-    /*this.selectedEmojiValue = '';
-    this.selectedEmojiDisplay.nativeElement.textContent = '';
-    this.selectedEmoji.nativeElement.value = '';
-    this.selectedEmojiPreview.nativeElement.style.display = 'none';
-    document.querySelectorAll('.emoji-option').forEach(opt => opt.classList.remove('selected'));*/
-
-    // Limpiar imagen
-    /*this.recipeImage.nativeElement.value = '';
-    this.imagePreview.nativeElement.src = '';
-    this.imagePreview.nativeElement.style.display = 'none';
-    this.imageUploadText.nativeElement.style.display = 'block';*/
-
-    this.activeTab = 'emoji';
   }
 
   switchTab2(button: EventTarget | null, tabName: string): void {
@@ -391,7 +428,7 @@ Redirecting to recipe details...`);
     this.selectedEmojiDisplay.nativeElement.textContent = emoji;
     this.selectedEmojiPreview.nativeElement.style.display = 'flex';
 
-    this.recipe.emoji = emoji;
+    this.recipeToCreate.emoji = emoji;
   }
 
   previewImage(event: any): void {
@@ -404,7 +441,7 @@ Redirecting to recipe details...`);
         this.imageUploadText.nativeElement.style.display = 'none';
       };
       reader.readAsDataURL(file);
-      this.recipe.imageFile = file;
+      this.recipeToCreate.imageFile = file;
     }
   }
 
@@ -418,7 +455,7 @@ Redirecting to recipe details...`);
   }
 
   addIngredient(): void {
-    this.recipe.ingredients.push({ quantity: '', unit: '', name: '' });
+    this.recipeToCreate.ingredients.push({ quantity: '', unit: '', name: '' });
   }
 
   addIngredient2(): void {
@@ -452,7 +489,7 @@ Redirecting to recipe details...`);
   }
 
   removeIngredient(index: number): void {
-    this.recipe.ingredients.splice(index, 1);
+    this.recipeToCreate.ingredients.splice(index, 1);
   }
 
   removeIngredient2(event: Event): void {
@@ -470,18 +507,26 @@ Redirecting to recipe details...`);
     });
   }
 
+  updateStepNumbers(): void {
+    this.recipeToCreate.instructions.forEach((inst, index) => {
+      inst.stepNumber = index + 1;
+    });
+  }
+
   addInstruction(): void {
-    this.recipe.instructions.push({ text: '', time: '' });
+    this.recipeToCreate.instructions.push({ stepNumber: 0, text: '', time: '' });
+    this.updateStepNumbers();
   }
 
   removeInstruction(index: number): void {
-    if (this.recipe.instructions.length > 1) {
-      this.recipe.instructions.splice(index, 1);
+    if (this.recipeToCreate.instructions.length > 1) {
+      this.recipeToCreate.instructions.splice(index, 1);
+      this.updateStepNumbers();
     }
   }
 
   dropInstruction(event: CdkDragDrop<any[]>): void {
-    moveItemInArray(this.recipe.instructions, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.recipeToCreate.instructions, event.previousIndex, event.currentIndex);
   }
 
   addInstruction2(): void {
@@ -531,12 +576,149 @@ Redirecting to recipe details...`);
     this.imageUploadText.nativeElement.style.display = 'block';
   }
 
+  /* Tags Section */
+  selectedTags: string[] = [];
+  tagInput: string = '';
+  filteredSuggestions: string[] = [];
+
+  readonly tagSuggestions: string[] = [
+    'Healthy', 'Quick', 'Easy', 'Low Carb', 'High Protein', 'Gluten-Free', 'Dairy-Free',
+    'Vegan', 'Vegetarian', 'Keto', 'Paleo', 'Mediterranean', 'Asian', 'Italian', 'Mexican',
+    'Comfort Food', 'One Pot', 'No Bake', 'Make Ahead', 'Kid Friendly', 'Spicy', 'Sweet',
+    'Savory', 'Breakfast', 'Lunch', 'Dinner', 'Snack', 'Dessert', 'Appetizer', 'Side Dish',
+    'Main Course', 'Soup', 'Salad', 'Smoothie', 'Baked', 'Grilled', 'Fried', 'Steamed',
+    'Raw', 'Fermented', 'Pickled', 'Seasonal', 'Holiday', 'Party', 'Romantic', 'Budget',
+    'Gourmet', 'Traditional', 'Modern', 'Fusion', 'Street Food', 'Home Cooking'
+  ];
+
+  readonly popularTags: string[] = [
+    'Healthy', 'Quick', 'Easy', 'Low Carb', 'High Protein', 'Gluten-Free',
+    'Dairy-Free', 'Vegan', 'Vegetarian', 'Keto', 'Paleo', 'Mediterranean',
+    'Asian', 'Italian', 'Mexican', 'Comfort Food', 'One Pot', 'No Bake',
+    'Make Ahead', 'Kid Friendly'
+  ];
+
+  handleTagInput(event: Event): void {
+    event.preventDefault();
+    const keyboardEvent = event as KeyboardEvent;
+    const tag = this.tagInput.trim();
+    if (tag && !this.selectedTags.includes(tag)) {
+      this.addTag(tag);
+    }
+    this.tagInput = '';
+    this.filteredSuggestions = [];
+  }
+
+  showTagSuggestions(): void {
+    const query = this.tagInput.trim().toLowerCase() || '';
+    console.log('Query:', query);
+
+    if (query.length === 0) {
+      this.filteredSuggestions = [];
+      return;
+    }
+
+    this.filteredSuggestions = this.tagSuggestions
+      .filter(
+        tag =>
+          tag.toLowerCase().includes(query) &&
+          !this.selectedTags.includes(tag)
+      )
+      .slice(0, 8);
+  }
+
+  addTag(tag: string): void {
+    if (!this.selectedTags.includes(tag)) {
+      this.selectedTags.push(tag);
+    }
+    this.tagInput = '';
+    this.filteredSuggestions = [];
+  }
+
+  removeTag(tag: string): void {
+    this.selectedTags = this.selectedTags.filter(t => t !== tag);
+  }
+
+  cleanEmptyEntries(): void {
+    // Limpiar ingredientes vacíos
+    this.recipeToCreate.ingredients = this.recipeToCreate.ingredients.filter(ingredient =>
+      Object.values(ingredient).some(value => value && value.toString().trim() !== '')
+    );
+
+    // Limpiar instrucciones vacías
+    this.recipeToCreate.instructions = this.recipeToCreate.instructions.filter(instruction =>
+      Object.entries(instruction).some(([key, value]) =>
+        key === 'stepNumber' ? false : (value && value.toString().trim() !== '')
+      )
+    );
+
+    // Recalcular stepNumber si es necesario
+    this.recipeToCreate.instructions.forEach((instruction, index) => {
+      instruction.stepNumber = index + 1;
+    });
+  }
+
   submitRecipe(event: Event): void {
     event.preventDefault();
-    const formData = new FormData(this.createRecipeForm.nativeElement);
+    //const formData = new FormData(this.createRecipeForm.nativeElement);
+    if (!this.recipeToCreate.recipeName || !this.recipeToCreate.recipeCategory || !this.recipeToCreate.prepTime || !this.recipeToCreate.servings) {
+      alert('Please, fill in all required fields.');
+      return;
+    }
 
-    // Recoge datos, igual que en tu JS
-    // Lógica igual que ya tenías para mostrar alert o guardar receta
+    if (this.activeTab === 'emoji') {
+      if (this.recipeToCreate.emoji === '') {
+        alert('Please, fill in all required fields.');
+        return;
+      }
+    } else if (this.activeTab === 'image') {
+      if (this.recipeToCreate.imageFile === undefined) {
+        alert('Please, fill in all required fields.');
+        return;
+      }
+    }
+
+    this.recipeToCreate.tags = [...this.selectedTags];
+
+    if (this.activeTab === 'emoji') {
+      this.recipeToCreate.imageFile = undefined;
+    } else if (this.activeTab === 'image') {
+      this.recipeToCreate.emoji = undefined;
+    }
+
+    // Quiza en un futuro anyadir comprobacion ingredientes, instrucciones y tags
+    if (this.recipeToCreate.recipeDescription === '') this.recipeToCreate.recipeDescription = null as any;
+    if (this.recipeToCreate.recipeDiet === '') this.recipeToCreate.recipeDiet = null as any;
+    if (this.recipeToCreate.difficulty === '') this.recipeToCreate.difficulty = null as any;
+    if (
+      this.recipeToCreate.ingredients.length === 1 &&
+      Object.values(this.recipeToCreate.ingredients[0]).every(v => v === '')
+    ) {
+      this.recipeToCreate.ingredients = [];
+    }
+    if (
+      this.recipeToCreate.instructions.length === 1 &&
+      Object.entries(this.recipeToCreate.instructions[0]).every(([k, v]) => k === 'stepNumber' ? v === 0 : v === '')
+    ) {
+      this.recipeToCreate.instructions = [];
+    }
+
+    this.cleanEmptyEntries();
+
+    console.log('Recipe to submit:', this.recipeToCreate);
+
+    const email = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
+    if (email !== null) {
+      this.recipeService.createRecipe(email, this.recipeToCreate, this.recipeToCreate.imageFile).subscribe({
+        next: (res) => {
+          console.log(`Added recipe: `);
+          console.log(res)
+        },
+        error: (err) => {
+          console.error('Error cargando api', err)
+        }
+      });
+    }
 
     this.closeCreateRecipeModal();
   }

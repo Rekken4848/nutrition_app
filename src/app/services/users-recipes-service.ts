@@ -8,35 +8,35 @@ import { UsersRecipes } from '../models/users-recipes.model';
 })
 export class UsersRecipesService {
 
-  private apiUrl = 'http://localhost:8080/users-recipes';
+  private apiUrl = 'http://localhost:8080/usersrecipes';
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<UsersRecipes[]> {
+  getAllUsersRecipes(): Observable<UsersRecipes[]> {
     return this.http.get<UsersRecipes[]>(`${this.apiUrl}`);
   }
 
-  getById(id: number): Observable<UsersRecipes> {
+  getUsersRecipesById(id: number): Observable<UsersRecipes> {
     return this.http.get<UsersRecipes>(`${this.apiUrl}/${id}`);
   }
 
-  create(usersRecipes: UsersRecipes): Observable<UsersRecipes> {
+  createUsersRecipes(usersRecipes: UsersRecipes): Observable<UsersRecipes> {
     return this.http.post<UsersRecipes>(`${this.apiUrl}`, usersRecipes);
   }
 
-  update(id: number, usersRecipes: UsersRecipes): Observable<UsersRecipes> {
+  updateUsersRecipes(id: number, usersRecipes: UsersRecipes): Observable<UsersRecipes> {
     return this.http.put<UsersRecipes>(`${this.apiUrl}/${id}`, usersRecipes);
   }
 
-  delete(id: number): Observable<void> {
+  deleteUsersRecipes(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  getByUserId(userId: number): Observable<UsersRecipes[]> {
+  /*getByUserId(userId: number): Observable<UsersRecipes[]> {
     return this.http.get<UsersRecipes[]>(`${this.apiUrl}/user/${userId}`);
   }
 
   getByRecipeId(recipeId: number): Observable<UsersRecipes[]> {
     return this.http.get<UsersRecipes[]>(`${this.apiUrl}/recipe/${recipeId}`);
-  }
+  }*/
 }

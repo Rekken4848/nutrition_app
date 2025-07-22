@@ -91,7 +91,7 @@ body {
             transparent 12px,
             transparent 14px);
     border-radius: 8px;
-    position: relative;
+    /*position: absolute;*/
     opacity: 0.6;
 }
 
@@ -375,6 +375,7 @@ body {
     z-index: 2000;
     padding: 2rem;
     overflow-y: auto;
+    display: flex;
 }
 
 .product-modal.show {
@@ -614,6 +615,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    justify-content: center;
 }
 
 .btn-add-product:hover {

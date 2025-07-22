@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserMultiFormatOneDReader, IScannerControls } from '@zxing/browser';
 import { OpenFoodFactApi } from '../open-food-facts/services/open-food-fact-api';
 import { Food } from '../open-food-facts/models/food.model';
+import { FoodService } from '../services/food-service';
 
 interface FoodItem {
   name: string;
@@ -43,7 +44,7 @@ export class ScanFood {
   product: Food | null = null;
   showModal = false;
 
-  constructor(private openFoodFactApi: OpenFoodFactApi) { }
+  constructor(private openFoodFactApi: OpenFoodFactApi, private foodService: FoodService) { }
 
   async startScanning() {
     this.isScanning = true;
@@ -79,8 +80,13 @@ export class ScanFood {
         }
       );
 
-    } catch (err) {
-      console.error('Error al iniciar escáner:', err);
+    } catch (err: any) {
+      //console.error('Error al iniciar escáner:', err);
+      if (err.name === 'NotFoundError') {
+        alert('No se encontró cámara. Por favor, conecta una cámara y vuelve a intentarlo.');
+      } else {
+        console.error('Error al iniciar escáner:', err);
+      }
       this.isScanning = false;
     }
   }
@@ -127,8 +133,21 @@ export class ScanFood {
 
   addProduct() {
     if (!this.product) return;
-    console.log('Producto añadido:', this.product);
-    // Llamada api guardar
+
+    const email = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
+    if (email !== null) {
+      this.foodService.createFood(email, this.product).subscribe({
+        next: (res) => {
+          console.log(`Added food with code ${this.product?.code}`);
+          console.log(res)
+          alert("Producto añadido correctamente")
+        },
+        error: (err) => {
+          console.error('Error cargando api', err)
+        }
+      });
+    }
+
     this.closeProductModal();
   }
 

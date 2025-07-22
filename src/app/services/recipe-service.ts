@@ -8,7 +8,7 @@ import { Recipe } from '../models/recipe.model';
 })
 export class RecipeService {
 
-  private apiUrl = 'http://localhost:8080/recipes';
+  private apiUrl = 'http://localhost:8080/recipe';
 
   constructor(private http: HttpClient) { }
 
@@ -20,19 +20,41 @@ export class RecipeService {
     return this.http.get<Recipe>(`${this.apiUrl}/${id}`);
   }
 
-  createRecipe(recipe: Recipe): Observable<Recipe> {
-    return this.http.post<Recipe>(`${this.apiUrl}`, recipe);
+  getRecipeByUser(email: string): Observable<Recipe[]> {
+    return this.http.get<Recipe[]>(`${this.apiUrl}/myrecipes/${email}`);
   }
 
-  updateRecipe(id: number, recipe: Recipe): Observable<Recipe> {
-    return this.http.put<Recipe>(`${this.apiUrl}/${id}`, recipe);
+  createRecipe(email: string, recipe: Recipe, file?: File): Observable<Recipe> {
+    const formData = new FormData();
+
+    if (file) {
+      formData.append('image', file);
+    }
+
+    formData.append(
+      'recipe',
+      new Blob([JSON.stringify(recipe)], { type: 'application/json' })
+    );
+    return this.http.post<Recipe>(`${this.apiUrl}/${email}`, formData);
+  }
+
+  updateRecipe(id: number, email: string, recipe: Recipe, file: File): Observable<Recipe> {
+    const formData = new FormData();
+
+    formData.append('image', file);
+
+    formData.append(
+      'recipe',
+      new Blob([JSON.stringify(recipe)], { type: 'application/json' })
+    );
+    return this.http.put<Recipe>(`${this.apiUrl}/${id}/${email}`, formData);
   }
 
   deleteRecipe(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  getRecipesByCategory(category: string): Observable<Recipe[]> {
+  /*getRecipesByCategory(category: string): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(`${this.apiUrl}/category/${category}`);
-  }
+  }*/
 }

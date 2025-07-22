@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { OpenFoodFactApi } from '../open-food-facts/services/open-food-fact-api';
 import { Food } from '../open-food-facts/models/food.model';
+import { FoodService } from '../services/food-service';
 
 interface FoodItem {
   id: number;
@@ -44,7 +45,7 @@ export class FoodList {
     { id: 15, name: "Oats", category: "grains", serving: "1 cup dry (81g)", calories: 307, protein: 11, carbs: 55, fat: 5, fiber: 8, image: "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg", quantity: 20 },
   ];
 
-  currentCategory = 'all';
+  //currentCategory = 'all';
   currentSearch = '';
   filteredFoods: FoodItem[] = [...this.foods];
 
@@ -60,6 +61,58 @@ export class FoodList {
     return this.filteredFoods.length;
   }
 
+  COMMON_CATEGORIES = [
+    'snacks',
+    'chocolates',
+    'beverages',
+    'pizzas',
+    'cheeses',
+    'plant-based-foods',
+    'vegan-foods',
+    'meats',
+    'breakfast-cereals',
+    'desserts',
+    'sauces',
+    'prepared-meals',
+    'cheese',
+  ];
+
+  COMMON_COUNTRIES = [
+    'usa',
+    'canada',
+    'uk',
+    'france',
+    'germany',
+    'spain',
+    'italy',
+    'japan',
+    'australia',
+  ];
+
+  showCommonCategories = false;
+
+  showCountryCategories = false;
+
+  currentCategory: string = '';
+
+  currentCountry: string = '';
+
+  onCategorySelect(category: string) {
+    if (this.currentSearch !== '') {
+      this.currentCategory = category;
+      this.searchNewFoods(this.currentSearch, this.currentCountry, category);
+      this.showCommonCategories = false;
+    }
+  }
+
+  onCountrySelect(country: string) {
+    if (this.currentSearch !== '') {
+      this.currentCountry = country;
+      this.searchNewFoods(this.currentSearch, country, this.currentCategory);
+      this.showCountryCategories = false;
+    }
+  }
+
   filterFoods() {
     /*this.filteredFoods = this.foods.filter(food => {
       const categoryMatch = this.currentCategory === 'all' || food.category === this.currentCategory;
@@ -73,11 +126,12 @@ export class FoodList {
     });
   }
 
-  searchNewFoods(search: string) {
-    this.openFoodFactApi.searchProducts(search).subscribe({
+  searchNewFoods(search: string, country?: string, category?: string) {
+    this.currentSearch = search;
+    this.openFoodFactApi.searchProducts(search, country, category).subscribe({
       next: (res) => {
         console.log("open Food Fact Api: ", res);
-        this.foodListApi = res
+        this.foodListApi = res;
         this.filteredFoodListApi = [...this.foodListApi];
       },
       error: (err) => {
@@ -87,20 +141,32 @@ export class FoodList {
   }
 
   onSearchChange(search: string) {
-    this.currentSearch = search;
+    //this.currentSearch = search;
     //this.filterFoods();
   }
 
-  onCategorySelect(category: string) {
+  /*onCategorySelect(category: string) {
     this.currentCategory = category;
     this.filterFoods();
+  }*/
+
+  addFood(code: string) {
+    const food = this.foodListApi.find(food => food.code === code);
+    const email = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
+    if (food !== undefined && email !== null) {
+      this.foodService.createFood(email, food).subscribe({
+        next: (res) => {
+          console.log(`Added food with code ${code}`);
+          console.log(res)
+        },
+        error: (err) => {
+          console.error('Error cargando api', err)
+        }
+      });
+    }
   }
 
-  addFood(id: number) {
-    console.log(`Added food with ID ${id}`);
-  }
-
-  constructor(private openFoodFactApi: OpenFoodFactApi) { }
+  constructor(private openFoodFactApi: OpenFoodFactApi, private foodService: FoodService) { }
 
   foodListApi: Food[] = [];
   filteredFoodListApi: Food[] = [];

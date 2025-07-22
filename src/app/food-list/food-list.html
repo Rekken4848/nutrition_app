@@ -28,7 +28,7 @@
 
     <div class="category-filters">
       <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'all' }"
-        (click)="onCategorySelect('all')">All Foods</button>
+        (click)="onCategorySelect('')">All Foods</button>
       <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'fruits' }"
         (click)="onCategorySelect('fruits')">Fruits</button>
       <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'vegetables' }"
@@ -39,6 +39,41 @@
         (click)="onCategorySelect('grains')">Grains</button>
       <button class="category-btn" [ngClass]="{ 'active': currentCategory === 'dairy' }"
         (click)="onCategorySelect('dairy')">Dairy</button>
+      <div class="dropdown" (mouseleave)="showCommonCategories = false">
+        <button class="category-btn" [ngClass]="{ 'active': COMMON_CATEGORIES.includes(currentCategory) }"
+          (mouseenter)="showCommonCategories = true">Categories ▼</button>
+
+        <div class="dropdown-menu" *ngIf="showCommonCategories">
+          <button class="dropdown-item" (click)="onCategorySelect('milk')">Milk</button>
+          <button class="dropdown-item" (click)="onCategorySelect('cheese')">Cheese</button>
+          <button class="dropdown-item" (click)="onCategorySelect('yogurt')">Yogurt</button>
+          <button class="dropdown-item" (click)="onCategorySelect('butter')">Butter</button>
+        </div>
+      </div>
+    </div>
+    <div class="country-info-filters">
+      <div class="dropdown-country" (mouseleave)="showCountryCategories = false">
+        <button class="category-btn" [ngClass]="{ 'active': COMMON_COUNTRIES.includes(currentCountry) }"
+          (mouseenter)="showCountryCategories = true">Country ▼</button>
+        <div class="dropdown-menu" id="countryDropdown" *ngIf="showCountryCategories">
+          <div class="dropdown-item" (click)="onCountrySelect('')">All Countries</div>
+          <div class="dropdown-item" (click)="onCountrySelect('usa')">USA</div>
+          <div class="dropdown-item" (click)="onCountrySelect('canada')">Canada</div>
+          <div class="dropdown-item" (click)="onCountrySelect('uk')">United Kingdom</div>
+          <div class="dropdown-item" (click)="onCountrySelect('france')">France</div>
+          <div class="dropdown-item" (click)="onCountrySelect('germany')">Germany</div>
+          <div class="dropdown-item" (click)="onCountrySelect('spain')">Spain</div>
+          <div class="dropdown-item" (click)="onCountrySelect('italy')">Italy</div>
+          <div class="dropdown-item" (click)="onCountrySelect('japan')">Japan</div>
+          <div class="dropdown-item" (click)="onCountrySelect('australia')">Australia</div>
+        </div>
+      </div>
+
+      <div class="pagination-info">
+        <span>Page <span id="currentPageDisplay">1</span> of <span id="totalPagesDisplay">3</span></span>
+        <span>•</span>
+        <span><span id="currentResultsDisplay">15</span> results</span>
+      </div>
     </div>
   </div>
 
@@ -61,7 +96,7 @@
         </thead>
         <tbody>
           <tr *ngIf="filteredFoodListApi.length === 0">
-            <td colspan="8">
+            <td colspan="10">
               <div class="no-results">
                 <h3>No foods found</h3>
                 <p>Try adjusting your search criteria</p>
@@ -81,10 +116,48 @@
             <td class="nutrition-value">{{ food.carbs_per_100g }}</td>
             <td class="nutrition-value">{{ food.fat_per_100g }}</td>
             <td class="nutrition-value">{{ food.fiber_per_100g }}</td>
-            <td><button class="add-btn" (click)="addFood(1)">Add</button></td>
+            <td><button class="add-btn" (click)="addFood(food.code)">Add</button></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
+
+  <section class="pagination-section">
+    <div class="pagination-controls">
+      <button class="pagination-btn" id="prevBtn" onclick="previousPage()" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" />
+        </svg>
+        Previous
+      </button>
+      <button class="pagination-btn" id="nextBtn" onclick="nextPage()">
+        Next
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="pagination-info-text">
+      <div class="page-info">
+        Showing <span id="showingStart">1</span>-<span id="showingEnd">5</span> of <span id="totalResults">247</span>
+        foods
+      </div>
+      <div class="results-info">
+        <span id="filteredInfo">All foods displayed</span>
+      </div>
+    </div>
+
+    <div class="items-per-page">
+      <label for="itemsPerPage">Items per page:</label>
+      <select class="items-select" id="itemsPerPage" onchange="changeItemsPerPage()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15" selected>15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+      </select>
+    </div>
+  </section>
 </div>

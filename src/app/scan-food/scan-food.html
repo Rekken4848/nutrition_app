@@ -9,7 +9,7 @@
     <div class="scan-area" [class.scanning]="isScanning" (click)="startScanning()">
       <video id="video-preview" autoplay muted playsinline
         style="width: 100%; height: 100%; object-fit: cover;"></video>
-      <div class="barcode-visual">
+      <div class="barcode-visual" [ngStyle]="{ position: isScanning ? 'static' : 'absolute' }">
         <div class="scan-line"></div>
       </div>
     </div>
