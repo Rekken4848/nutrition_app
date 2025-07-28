@@ -153,6 +153,14 @@ export class Recipes {
 
   ngOnInit(): void {
     document.body.classList.add('recipes-body');
+    this.loadRecipes();
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('recipes-body');
+  }
+
+  loadRecipes(): void {
     const email = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
     if (email !== null) {
       this.recipeService.getRecipeByUser(email).subscribe({
@@ -167,10 +175,6 @@ export class Recipes {
         }
       });
     }
-  }
-
-  ngOnDestroy(): void {
-    document.body.classList.remove('recipes-body');
   }
 
   filterRecipes(): void {
@@ -713,13 +717,14 @@ Redirecting to recipe details...`);
         next: (res) => {
           console.log(`Added recipe: `);
           console.log(res)
+          this.loadRecipes();
         },
         error: (err) => {
           console.error('Error cargando api', err)
         }
       });
     }
-
+    
     this.closeCreateRecipeModal();
   }
 }

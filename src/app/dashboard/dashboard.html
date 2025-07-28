@@ -1,13 +1,13 @@
 <div class="container">
   <div class="welcome-section">
-    <h1 class="welcome-title">Welcome back, {{ userName }}! 👋</h1>
+    <h1 class="welcome-title">Welcome back, {{ userWithStatsDto?.name }}! 👋</h1>
     <p class="welcome-date">Today - {{ today }}</p>
   </div>
 
   <div class="kitchen-highlight">
     <h2>🍳 Smart Kitchen Hub</h2>
     <p>Access your IoT kitchen devices, smart scales, and AI chef assistant</p>
-    <a class="kitchen-btn" (click)="navigateToKitchen()">
+    <a class="kitchen-btn" style="cursor: pointer;" (click)="navigateToKitchen()">
       <div class="kitchen-icon">🍲</div>
       <span>Enter Smart Kitchen</span>
     </a>

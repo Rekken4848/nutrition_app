@@ -1,0 +1,339 @@
+<div class="container">
+    <section class="hero-section">
+        <h1 class="hero-title">IoT Sensors Dashboard</h1>
+        <p class="hero-subtitle">Monitor your kitchen environment, food measurements, and body composition with
+            precision IoT sensors for optimal nutrition tracking and health monitoring</p>
+    </section>
+
+    <div class="sensors-grid">
+        <!-- Climate Sensor -->
+        <div class="sensor-card">
+            <div class="sensor-header">
+                <div class="sensor-title">
+                    <div class="sensor-icon">🌡️</div>
+                    <span>Climate Sensor</span>
+                </div>
+                <div class="sensor-status status-online">
+                    <div class="status-dot"></div>
+                    <span>Online</span>
+                </div>
+            </div>
+
+            <div class="alert-section" id="climateAlert">
+                <div class="alert-title">
+                    ⚠️ Environment Alert
+                </div>
+                <div class="alert-message">
+                    Humidity levels are optimal for food storage
+                </div>
+            </div>
+
+            <div class="dual-reading">
+                <div class="sensor-reading">
+                    <div class="reading-label">Temperature</div>
+                    <div class="reading-value">
+                        <span id="temperature">{{ temhum?.temperature }}</span>
+                        <span class="reading-unit">°C</span>
+                    </div>
+                </div>
+                <div class="sensor-reading">
+                    <div class="reading-label">Humidity</div>
+                    <div class="reading-value">
+                        <span id="humidity">{{ temhum?.humidity }}</span>
+                        <span class="reading-unit">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reading-timestamp">
+                Last updated: <span id="climateTimestamp">Just now</span>
+            </div>
+
+            <div class="sensor-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="tempMin">18.2°C</span>
+                    <span class="stat-label">Min Today</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="tempMax">24.8°C</span>
+                    <span class="stat-label">Max Today</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="humidityAvg">42%</span>
+                    <span class="stat-label">Avg Humidity</span>
+                </div>
+            </div>
+
+            <div class="sensor-controls">
+                <button class="control-btn btn-primary" (click)="calibrateClimate()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12,1L21,5V11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1M12,7C10.89,7 10,7.89 10,9A2,2 0 0,0 12,11A2,2 0 0,0 14,9C14,7.89 13.1,7 12,7Z" />
+                    </svg>
+                    Calibrate
+                </button>
+                <button class="control-btn btn-secondary" (click)="exportClimateData()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                    </svg>
+                    Export Data
+                </button>
+            </div>
+
+            <div class="chart-container">
+                📊 24-hour temperature & humidity trends
+            </div>
+        </div>
+
+        <!-- Food Scale Sensor -->
+        <div class="sensor-card">
+            <div class="sensor-header">
+                <div class="sensor-title">
+                    <div class="sensor-icon">⚖️</div>
+                    <span>Smart Food Scale</span>
+                </div>
+                <div class="sensor-status status-online">
+                    <div class="status-dot"></div>
+                    <span>Connected</span>
+                </div>
+            </div>
+
+            <div class="food-scale-display">
+                <button class="tare-btn" (click)="tareScale()">TARE</button>
+
+                <div class="scale-platform">
+                    <div class="scale-weight">
+                        <span id="scaleWeight">{{ weight?.weight| number:'1.1-1' }}</span>
+                        <span style="font-size: 0.6em;" id="scaleUnit">{{ sensorData.scaleUnit }}</span>
+                    </div>
+                </div>
+
+                <div class="reading-timestamp">
+                    Last measurement: <span id="scaleTimestamp">{{ scaleTimestamp }}</span>
+                </div>
+
+                <div class="unit-selector">
+                    <button class="unit-btn" [class.active]="activeUnit==='g'" (click)="changeUnit('g')">Grams</button>
+                    <button class="unit-btn" [class.active]="activeUnit==='oz'"
+                        (click)="changeUnit('oz')">Ounces</button>
+                    <button class="unit-btn" [class.active]="activeUnit==='lb'"
+                        (click)="changeUnit('lb')">Pounds</button>
+                </div>
+            </div>
+
+            <div class="sensor-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="totalMeasurements">47</span>
+                    <span class="stat-label">Measurements Today</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="avgWeight">125g</span>
+                    <span class="stat-label">Average Weight</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="maxWeight">850g</span>
+                    <span class="stat-label">Max Weight</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="accuracy">±0.1g</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+            </div>
+
+            <div class="sensor-controls">
+                <button class="control-btn btn-primary" (click)="addToFoodLog()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                    </svg>
+                    Add to Food Log
+                </button>
+                <button class="control-btn btn-secondary" (click)="calibrateScale()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12,1L21,5V11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1M12,7C10.89,7 10,7.89 10,9A2,2 0 0,0 12,11A2,2 0 0,0 14,9C14,7.89 13.1,7 12,7Z" />
+                    </svg>
+                    Calibrate Scale
+                </button>
+            </div>
+        </div>
+
+        <!-- Smart Body Scale -->
+        <div class="sensor-card">
+            <div class="sensor-header">
+                <div class="sensor-title">
+                    <div class="sensor-icon">🧍</div>
+                    <span>Smart Body Scale</span>
+                </div>
+                <div class="sensor-status status-online">
+                    <div class="status-dot"></div>
+                    <span>Synced</span>
+                </div>
+            </div>
+
+            <div class="body-scale-display">
+                <div class="sync-status">
+                    <div class="status-dot"></div>
+                    <span>Synced with IoT Scale</span>
+                </div>
+                
+                <div class="reading-label">Your Current Weight</div>
+                <div class="body-scale-platform">
+                    <div class="body-weight-display">
+                        <span id="bodyWeight">{{ bodyWeight?.body_weight }}</span>
+                        <span class="body-weight-unit" id="bodyWeightUnit">kg</span>
+                    </div>
+                </div>
+
+                <div class="reading-timestamp">
+                    Last measured: <span id="bodyScaleTimestamp">{{ bodyScaleTimestamp }}</span>
+                </div>
+
+                <div class="bmi-indicator">
+                    <div>
+                        <div style="font-size: 0.9rem; color: var(--dark-gray); margin-bottom: 0.3rem;">BMI</div>
+                        <div class="bmi-value" id="bmiValue">{{ sensorData.bmi.toFixed(1) }}</div>
+                    </div>
+                    <div class="bmi-category bmi-normal" id="bmiCategory">Normal</div>
+                </div>
+
+                <div class="body-composition">
+                    <div class="composition-item">
+                        <span class="composition-value" id="bodyFat">{{ sensorData.bodyFat.toFixed(1) }}%</span>
+                        <span class="composition-label">Body Fat</span>
+                    </div>
+                    <div class="composition-item">
+                        <span class="composition-value" id="muscleMass">32.1kg</span>
+                        <span class="composition-label">Muscle Mass</span>
+                    </div>
+                    <div class="composition-item">
+                        <span class="composition-value" id="waterPercentage">{{ sensorData.waterPercentage.toFixed(1) }}%</span>
+                        <span class="composition-label">Water %</span>
+                    </div>
+                    <div class="composition-item">
+                        <span class="composition-value" id="boneMass">2.8kg</span>
+                        <span class="composition-label">Bone Mass</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sensor-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="weightChange">-0.3kg</span>
+                    <span class="stat-label">This Week</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="goalProgress">73%</span>
+                    <span class="stat-label">Goal Progress</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="measurementStreak">12</span>
+                    <span class="stat-label">Day Streak</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="avgWeightLoss">0.2kg</span>
+                    <span class="stat-label">Avg/Week</span>
+                </div>
+            </div>
+
+            <div class="sensor-controls">
+                <button class="control-btn btn-primary" (click)="syncBodyData()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z"/>
+                    </svg>
+                    Sync Data
+                </button>
+                <button class="control-btn btn-secondary" (click)="setWeightGoal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4M15,5.9A2.1,2.1 0 0,1 17.1,8A2.1,2.1 0 0,1 15,10.1A2.1,2.1 0 0,1 12.9,8A2.1,2.1 0 0,1 15,5.9M4,7V10H1V12H4V15H6V12H9V10H6V7H4M15,13C12.33,13 7,14.33 7,17V20H23V17C23,14.33 17.67,13 15,13M15,14.9C17.97,14.9 21.1,16.36 21.1,17V18.1H8.9V17C8.9,16.36 12,14.9 15,14.9Z"/>
+                    </svg>
+                    Set Goal
+                </button>
+            </div>
+
+            <div class="chart-container">
+                📈 30-day weight & body composition trends
+            </div>
+        </div>
+
+        <!-- Timer -->
+        <div class="sensor-card">
+            <div class="sensor-header">
+                <div class="sensor-title">
+                    <div class="sensor-icon">⏰</div>
+                    <span>Smart Kitchen Timer</span>
+                </div>
+                <div class="sensor-status status-online">
+                    <div class="status-dot"></div>
+                    <span>Active</span>
+                </div>
+            </div>
+
+            <div class="sensor-reading">
+                <div class="reading-label">Current Timer</div>
+                <div class="reading-value">
+                    <span id="timerDisplay">{{ timerDisplay }}</span>
+                </div>
+                <div class="reading-timestamp">
+                    Status: <span id="timerStatus">{{ timerStatus }}</span>
+                </div>
+            </div>
+
+            <div class="sensor-controls">
+                <button class="control-btn btn-primary" (click)="startTimer()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+                    </svg>
+                    Start
+                </button>
+                <button class="control-btn btn-secondary" (click)="pauseTimer()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
+                    </svg>
+                    Pause
+                </button>
+                <button class="control-btn btn-danger" (click)="resetTimer()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"/>
+                    </svg>
+                    Reset
+                </button>
+            </div>
+
+            <div class="sensor-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="activeTimers">2</span>
+                    <span class="stat-label">Active Timers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="completedToday">{{ completedToday }}</span>
+                    <span class="stat-label">Completed Today</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="connection-status">
+        <div class="connection-item">
+            <div class="connection-icon">📡</div>
+            <div class="connection-info">
+                <h4>WiFi Connection</h4>
+                <p>Connected to NutriTrack_IoT</p>
+            </div>
+        </div>
+        <div class="connection-item">
+            <div class="connection-icon">☁️</div>
+            <div class="connection-info">
+                <h4>Cloud Sync</h4>
+                <p>Last sync: 2 minutes ago</p>
+            </div>
+        </div>
+        <div class="connection-item">
+            <div class="connection-icon">🔋</div>
+            <div class="connection-info">
+                <h4>Battery Status</h4>
+                <p>All sensors: 85-92%</p>
+            </div>
+        </div>
+    </div>
+</div>

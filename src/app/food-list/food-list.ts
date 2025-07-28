@@ -113,6 +113,36 @@ export class FoodList {
     }
   }
 
+  myFoodsActive: boolean = false
+
+  getMyFoods(): void {
+    const email = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
+    if (email === null) return;
+    this.foodService.getFoodByUser(email).subscribe({
+      next: (res) => {
+        console.log("My foods: ", res);
+        this.foodListApi = res.map((food: any) => ({
+          ...food,
+          serving_size: food.servingSize,
+          calories_per_100g: food.caloriesPer100g,
+          calories_per_serving: food.caloriesPerServing,
+          proteins_per_100g: food.proteinsPer100g,
+          fat_per_100g: food.fatPer100g,
+          carbs_per_100g: food.carbsPer100g,
+          sugars_per_100g: food.sugarsPer100g,
+          fiber_per_100g: food.fiberPer100g,
+          product_quantity: food.productQuantity,
+          product_quantity_unit: food.productQuantityUnit
+        }));
+        this.filteredFoodListApi = [...this.foodListApi];
+        this.myFoodsActive = true;
+      },
+      error: (err) => {
+        console.error('Error cargando mis comidas', err)
+      }
+    });
+  }
+
   filterFoods() {
     /*this.filteredFoods = this.foods.filter(food => {
       const categoryMatch = this.currentCategory === 'all' || food.category === this.currentCategory;
@@ -133,6 +163,7 @@ export class FoodList {
         console.log("open Food Fact Api: ", res);
         this.foodListApi = res;
         this.filteredFoodListApi = [...this.foodListApi];
+        this.myFoodsActive = false;
       },
       error: (err) => {
         console.error('Error cargando api', err)

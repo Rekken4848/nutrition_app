@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserStatsService } from '../services/user-stats-service';
 import { UserWithStatsDto } from '../models/user-with-stats-dto.model';
 
@@ -34,8 +34,7 @@ export class Dashboard {
   ];
 
   navigateToKitchen() {
-    // Aquí se puede usar Angular Router si se desea
-    console.log('Navigating to Smart Kitchen...');
+    this.router.navigate(['/kitchen']);
   }
 
   addFood(mealType: string) {
@@ -78,7 +77,7 @@ export class Dashboard {
 
   userWithStatsDto: UserWithStatsDto | null = null;
 
-  constructor(private userStatsService: UserStatsService) { }
+  constructor(private userStatsService: UserStatsService, private router: Router) { }
 
   ngOnInit(): void {
     //let userService: UserService;

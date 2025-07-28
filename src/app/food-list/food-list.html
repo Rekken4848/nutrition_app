@@ -69,6 +69,9 @@
         </div>
       </div>
 
+      <button class="category-btn" [ngClass]="{ 'active': myFoodsActive === true }"
+        (click)="getMyFoods()">My foods</button>
+
       <div class="pagination-info">
         <span>Page <span id="currentPageDisplay">1</span> of <span id="totalPagesDisplay">3</span></span>
         <span>•</span>

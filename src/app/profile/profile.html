@@ -8,8 +8,8 @@
       <button class="avatar-edit">📷</button>
       <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)">
     </div>
-    <h1 class="profile-name">{{ user.firstName }} {{ user.lastName }}</h1>
-    <p class="profile-email">{{ user.email }}</p>
+    <h1 class="profile-name">{{ userWithStatsDto?.name }} {{ userWithStatsDto?.last_name }}</h1>
+    <p class="profile-email">{{ userWithStatsDto?.email }}</p>
     <div class="profile-stats">
       <div class="stat-item" *ngFor="let s of stats">
         <div class="stat-value">{{ s.value }}</div>

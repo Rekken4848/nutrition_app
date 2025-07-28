@@ -20,6 +20,10 @@ export class TemperatureHumidityService {
     return this.http.get<TemperatureHumidity>(`${this.apiUrl}/${id}`);
   }
 
+  getLatestTemperatureHumidity(): Observable<TemperatureHumidity> {
+    return this.http.get<TemperatureHumidity>(`${this.apiUrl}/latest`);
+  }
+
   createTemperatureHumidity(temperatureHumidity: TemperatureHumidity): Observable<TemperatureHumidity> {
     return this.http.post<TemperatureHumidity>(`${this.apiUrl}`, temperatureHumidity);
   }

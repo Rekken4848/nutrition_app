@@ -7,6 +7,13 @@
     --red-orange: #FF4E2F;
     --black: #0B0B0B;
     --white: #FFFFFF;
+    /* Sensors */
+    --light-gray: #F8F9FA;
+    --medium-gray: #E9ECEF;
+    --dark-gray: #6C757D;
+    --blue: #007BFF;
+    --yellow: #FFC107;
+    --purple: #6F42C1;
 }
 
 * {
@@ -153,6 +160,15 @@
 /* Body Scale */
 
 .body-scale-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    color: var(--black);
+}
+
+/* Sensors */
+
+.sensors-body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--cream);
     min-height: 100vh;

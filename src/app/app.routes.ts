@@ -11,6 +11,7 @@ import { authGuard } from './auth/auth-guard';
 import { AiAssistant } from './ai-assistant/ai-assistant';
 import { BodyScale } from './body-scale/body-scale';
 import { guestGuard } from './auth/guest-guard';
+import { Sensors } from './sensors/sensors';
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard] },
@@ -23,7 +24,8 @@ export const routes: Routes = [
     { path: 'kitchen', component: Kitchen, canActivate: [authGuard] },
     { path: 'scanfood', component: ScanFood, canActivate: [authGuard] },
     { path: 'aiassistant', component: AiAssistant, canActivate: [authGuard] },
-    { path: 'bodyscale', component: BodyScale, canActivate: [authGuard] },
+    //{ path: 'bodyscale', component: BodyScale, canActivate: [authGuard] },
+    { path: 'sensors', component: Sensors, canActivate: [authGuard] },
 
     { path: '**', redirectTo: '' },
     //{ path: 'dashboard', loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard) },

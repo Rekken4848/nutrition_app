@@ -223,10 +223,10 @@
 
   <div class="auth-footer">
     <span *ngIf="isLogin">
-      Don't have an account? <a href="#" (click)="showRegister()">Create Account</a>
+      Don't have an account? <a (click)="showRegister()">Create Account</a>
     </span>
     <span *ngIf="!isLogin">
-      Already have an account? <a href="#" (click)="showLogin()">Sign In</a>
+      Already have an account? <a (click)="showLogin()">Sign In</a>
     </span>
   </div>
 </div>
