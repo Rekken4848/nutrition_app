@@ -1,14 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Openai {
   private readonly apiUrl = 'https://api.openai.com/v1/chat/completions';
-  private readonly apiKey = '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'; // ⚠️ Guarda esto en env en producción
-
+  private readonly apiKey = environment.openAiApiKey;
   constructor(private http: HttpClient) {}
 
   async getChatCompletion(messages: { role: 'user' | 'assistant' | 'system'; content: string }[]) {
